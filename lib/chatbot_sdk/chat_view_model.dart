@@ -3,6 +3,7 @@ import 'package:etiya_chatbot_flutter/chatbot_sdk/models/api/etiya_message_respo
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:etiya_chatbot_flutter/chatbot_sdk/etiya_chatbot.dart';
 import 'package:device_info/device_info.dart';
+import 'models/etiya_chat_message.dart';
 
 enum ChatEvents {
   newMessage
@@ -12,9 +13,7 @@ class ChatViewModel {
   final EtiyaChatbotBuilder builder;
   String deviceId = '';
 
-  _onNewMessage(MessageResponse message) {
-    print(message.text);
-  }
+  void Function(List<EtiyaChatMessage>)? onNewMessage;
 
   ChatViewModel({required this.builder}) {
     _initializeSocket();
@@ -51,7 +50,7 @@ class ChatViewModel {
     socket.nsp = '/chat';
     socket.on('newMessage', (json) {
       print('newMessage');
-      _onNewMessage(MessageResponse.fromJson(json));
+      onNewMessage?.call(MessageResponse.fromJson(json).mapToChatMessage());
     });
     socket.onConnect((_) => print('socket connected'));
     socket.onError((error) => print(error));

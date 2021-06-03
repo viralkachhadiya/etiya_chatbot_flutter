@@ -14,12 +14,17 @@ class EtiyaChatWidget extends StatefulWidget {
 }
 
 class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
-  List<EtiyaChatMessage> _messages = [
-    EtiyaChatMessage(
-        id: DateTime.now().toString(),
-        messageKind: MessageKind.text('Ta dah!'),
-        isMe: false),
-  ];
+  List<EtiyaChatMessage> _messages = [];
+
+  @override
+  void initState() {
+    widget.viewModel.onNewMessage = (messages) {
+      setState(() {
+        _messages.addAll(messages);
+      });
+    };
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

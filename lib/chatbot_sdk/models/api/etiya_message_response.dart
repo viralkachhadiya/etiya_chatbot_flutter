@@ -2,6 +2,7 @@
 //
 //     final messageResponse = messageResponseFromJson(jsonString);
 
+import 'package:flutter_chat/models/chat_user.dart';
 import 'dart:convert';
 
 // MessageResponse messageResponseFromJson(String str) => MessageResponse.fromJson(json.decode(str));
@@ -16,6 +17,7 @@ class MessageResponse {
     this.text,
     this.rawMessage,
     this.direction,
+    // this.session,
     this.ts,
     this.userId,
     this.user,
@@ -26,34 +28,50 @@ class MessageResponse {
   String? type;
   String? text;
   RawMessage? rawMessage;
+
+  // Session? session;
   String? direction;
   DateTime? ts;
   String? userId;
-  User? user;
+  EtiyaChatUser? user;
 
-  factory MessageResponse.fromJson(Map<String, dynamic> json) => MessageResponse(
-    id: json["id"] == null ? null : json["id"],
-    sessionId: json["sessionId"] == null ? null : json["sessionId"],
-    type: json["type"] == null ? null : json["type"],
-    text: json["text"] == null ? null : json["text"],
-    rawMessage: json["rawMessage"] == null ? null : RawMessage.fromJson(json["rawMessage"]),
-    direction: json["direction"] == null ? null : json["direction"],
-    ts: json["ts"] == null ? null : DateTime.parse(json["ts"]),
-    userId: json["userId"] == null ? null : json["userId"],
-    user: json["user"] == null ? null : User.fromJson(json["user"]),
-  );
+  factory MessageResponse.fromJson(Map<String, dynamic> json) =>
+      MessageResponse(
+        id: json["id"],
+        sessionId: json["sessionId"],
+        // session: json["session"] == null ? null : Session.fromJson(json["session"]),
+        type: json["type"],
+        text: json["text"],
+        rawMessage: json["rawMessage"] == null ? null : RawMessage.fromJson(
+            json["rawMessage"]),
+        direction: json["direction"],
+        ts: json["ts"] == null ? null : DateTime.parse(json["ts"]),
+        userId: json["userId"],
+        user: json["user"] == null ? null : EtiyaChatUser.fromJson(json["user"]),
+      );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "sessionId": sessionId,
-    "type": type,
-    "text": text,
-    "rawMessage": rawMessage?.toJson(),
-    "direction": direction,
-    "ts": ts?.toIso8601String(),
-    "userId": userId,
-    "user": user?.toJson(),
-  };
+  Map<String, dynamic> toJson() =>
+      {
+        "id": id,
+        "sessionId": sessionId,
+        "type": type,
+        "text": text,
+        "rawMessage": rawMessage?.toJson(),
+        "direction": direction,
+        "ts": ts?.toIso8601String(),
+        "userId": userId,
+        "user": user?.toJson(),
+      };
+
+  bool get hasQuickReply {
+    var qrCount = rawMessage?.data?.payload?.quickReplies?.length ?? 0;
+    return type == 'text' && qrCount != 0;
+  }
+
+  bool get hasImage {
+    // final mimeType = rawMessage?.data?.payload?.mime;
+    return type == 'file'; // && mimeType.contains("image")
+  }
 }
 
 class RawMessage {
@@ -71,41 +89,157 @@ class RawMessage {
   String? channel;
   String? carrier;
 
-  factory RawMessage.fromJson(Map<String, dynamic> json) => RawMessage(
-    to: json["to"] == null ? null : json["to"],
-    data: json["data"] == null ? null : Data.fromJson(json["data"]),
-    type: json["type"] == null ? null : json["type"],
-    channel: json["channel"] == null ? null : json["channel"],
-    carrier: json["__carrier"] == null ? null : json["__carrier"],
-  );
+  factory RawMessage.fromJson(Map<String, dynamic> json) =>
+      RawMessage(
+        to: json["to"] == null ? null : json["to"],
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        type: json["type"] == null ? null : json["type"],
+        channel: json["channel"] == null ? null : json["channel"],
+        carrier: json["__carrier"] == null ? null : json["__carrier"],
+      );
 
-  Map<String, dynamic> toJson() => {
-    "to": to,
-    "data": data?.toJson(),
-    "type": type,
-    "channel": channel,
-    "__carrier": carrier,
-  };
+  Map<String, dynamic> toJson() =>
+      {
+        "to": to,
+        "data": data?.toJson(),
+        "type": type,
+        "channel": channel,
+        "__carrier": carrier,
+      };
 }
 
 class Data {
   Data({
     this.text,
+    this.extras,
     this.payload,
   });
 
   String? text;
+  Extras? extras;
   Payload? payload;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-    text: json["text"] == null ? null : json["text"],
-    payload: json["payload"] == null ? null : Payload.fromJson(json["payload"]),
-  );
+  factory Data.fromJson(Map<String, dynamic> json) =>
+      Data(
+        text: json["text"],
+        extras: json["extras"] == null ? null : Extras.fromJson(json["extras"]),
+        payload: json["payload"] == null ? null : Payload.fromJson(json["payload"])
+      );
 
-  Map<String, dynamic> toJson() => {
-    "text": text,
-    "payload": payload?.toJson(),
-  };
+  Map<String, dynamic> toJson() =>
+      {
+        "text": text,
+        "extras": extras?.toJson(),
+        "payload": payload?.toJson(),
+      };
+}
+
+class Extras {
+  Extras({
+    this.language,
+    this.sourceID,
+    this.threadID,
+    this.categoryIDS,
+    this.inReplyToID,
+    this.firstInThread,
+    this.inReplyToAuthorID
+  });
+
+  String? language;
+  String? sourceID;
+  String? threadID;
+  List<String>? categoryIDS;
+  String? inReplyToID;
+  bool? firstInThread;
+  String? inReplyToAuthorID;
+
+  factory Extras.fromJson(Map<String, dynamic> json) =>
+      Extras(
+          language: json["language"],
+          sourceID: json["source_id"],
+          threadID: json["thread_id"],
+          categoryIDS: json["category_ids"],
+          inReplyToID: json["in_reply_to_id"],
+          firstInThread: json["first_in_thread"],
+          inReplyToAuthorID: json["in_reply_to_author_id"]
+      );
+
+  Map<String, dynamic> toJson() =>
+      {
+        "language": language,
+        "source_id": sourceID,
+        "thread_id": threadID,
+        "category_ids": categoryIDS,
+        "in_reply_to_id": inReplyToID,
+        "first_in_thread": firstInThread,
+        "in_reply_to_author_id": inReplyToAuthorID
+      };
+}
+
+// MARK: - Element 👍🏻
+class Element {
+  Element({this.title, this.buttons, this.picture, this.subtitle});
+
+  String? title;
+  List<CarouselButton>? buttons;
+  String? picture;
+  String? subtitle;
+
+  factory Element.fromJson(Map<String, dynamic> json) =>
+      Element(
+          title: json["title"],
+          buttons: json["buttons"],
+          picture: json["picture"],
+          subtitle: json["subtitle"]
+      );
+
+  Map<String, dynamic> toJson() =>
+      {
+        "title": title,
+        "buttons": buttons,
+        "picture": picture,
+        "subtitle": subtitle,
+      };
+}
+
+// MARK: - CarouselButton 👍🏻
+class CarouselButton {
+  CarouselButton({this.url, this.title});
+
+  String? url;
+  String? title;
+
+  factory CarouselButton.fromJson(Map<String, dynamic> json) =>
+      CarouselButton(
+          url: json["url"],
+          title: json["title"]
+      );
+
+  Map<String, dynamic> toJson() =>
+      {
+        "url": url,
+        "title": title
+      };
+}
+
+// MARK: - QuickReply 👍🏻
+class QuickReply {
+  QuickReply({this.title, this.payload});
+
+  String? title;
+  String? payload;
+
+  factory QuickReply.fromJson(Map<String, dynamic> json) =>
+      QuickReply(
+          title: json["title"],
+          payload: json["payload"]
+      );
+
+  Map<String, dynamic> toJson() =>
+      {
+        "title": title,
+        "payload": payload
+      };
 }
 
 class Payload {
@@ -113,27 +247,46 @@ class Payload {
     this.typing,
     this.markdown,
     this.conversationId,
+    this.quickReplies,
+    this.elements,
+    this.mime,
+    this.url
   });
 
   int? typing;
   bool? markdown;
   String? conversationId;
+  List<QuickReply>? quickReplies;
+  List<Element>? elements;
+  String? mime;
+  String? url;
 
-  factory Payload.fromJson(Map<String, dynamic> json) => Payload(
-    typing: json["typing"] == null ? null : json["typing"],
-    markdown: json["markdown"] == null ? null : json["markdown"],
-    conversationId: json["conversationId"] == null ? null : json["conversationId"],
-  );
+  factory Payload.fromJson(Map<String, dynamic> json) =>
+      Payload(
+          typing: json["typing"],
+          markdown: json["markdown"],
+          conversationId: json["conversationId"],
+          quickReplies: json["quick_replies"],
+          elements: json["elements"],
+          mime: json["mime"],
+          url: json["url"]
+      );
 
-  Map<String, dynamic> toJson() => {
-    "typing": typing,
-    "markdown": markdown,
-    "conversationId": conversationId,
-  };
+  Map<String, dynamic> toJson() =>
+      {
+        "typing": typing,
+        "markdown": markdown,
+        "conversationId": conversationId,
+        "quick_replies": quickReplies,
+        "elements": elements,
+        "mime": mime,
+        "url": url
+      };
 }
 
-class User {
-  User({
+class EtiyaChatUser extends ChatUser {
+
+  EtiyaChatUser({
     this.fullName,
     this.isOnline,
     this.id,
@@ -147,7 +300,7 @@ class User {
     this.createdOn,
     this.userType,
     this.platformId,
-  });
+  }): super(userName: fullName ?? "", avatarURL: null);
 
   String? fullName;
   bool? isOnline;
@@ -163,35 +316,46 @@ class User {
   String? userType;
   String? platformId;
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-    fullName: json["fullName"] == null ? null : json["fullName"],
-    isOnline: json["isOnline"] == null ? null : json["isOnline"],
-    id: json["id"] == null ? null : json["id"],
-    userId: json["userId"] == null ? null : json["userId"],
-    platform: json["platform"] == null ? null : json["platform"],
-    gender: json["gender"] == null ? null : json["gender"],
-    pictureUrl: json["pictureUrl"] == null ? null : json["pictureUrl"],
-    firstName: json["firstName"] == null ? null : json["firstName"],
-    lastName: json["lastName"] == null ? null : json["lastName"],
-    locale: json["locale"] == null ? null : json["locale"],
-    createdOn: json["createdOn"] == null ? null : DateTime.parse(json["createdOn"]),
-    userType: json["userType"] == null ? null : json["userType"],
-    platformId: json["platformId"] == null ? null : json["platformId"],
-  );
+  String get userName {
+    return fullName ?? 'userName';
+  }
 
-  Map<String, dynamic> toJson() => {
-    "fullName": fullName == null ? null : fullName,
-    "isOnline": isOnline == null ? null : isOnline,
-    "id": id == null ? null : id,
-    "userId": userId == null ? null : userId,
-    "platform": platform == null ? null : platform,
-    "gender": gender == null ? null : gender,
-    "pictureUrl": pictureUrl == null ? null : pictureUrl,
-    "firstName": firstName == null ? null : firstName,
-    "lastName": lastName == null ? null : lastName,
-    "locale": locale == null ? null : locale,
-    "createdOn": createdOn?.toIso8601String(),
-    "userType": userType == null ? null : userType,
-    "platformId": platformId == null ? null : platformId,
-  };
+  Uri? get avatarURL {
+    return null;
+  }
+
+  factory EtiyaChatUser.fromJson(Map<String, dynamic> json) =>
+      EtiyaChatUser(
+        fullName: json["fullName"],
+        isOnline: json["isOnline"],
+        id: json["id"],
+        userId: json["userId"],
+        platform: json["platform"],
+        gender: json["gender"],
+        pictureUrl: json["pictureUrl"],
+        firstName: json["firstName"],
+        lastName: json["lastName"],
+        locale: json["locale"],
+        createdOn: json["createdOn"] == null ? null : DateTime.parse(
+            json["createdOn"]),
+        userType: json["userType"],
+        platformId: json["platformId"],
+      );
+
+  Map<String, dynamic> toJson() =>
+      {
+        "fullName": fullName,
+        "isOnline": isOnline,
+        "id": id,
+        "userId": userId,
+        "platform": platform,
+        "gender": gender,
+        "pictureUrl": pictureUrl,
+        "firstName": firstName,
+        "lastName": lastName,
+        "locale": locale,
+        "createdOn": createdOn?.toIso8601String(),
+        "userType": userType,
+        "platformId": platformId,
+      };
 }
