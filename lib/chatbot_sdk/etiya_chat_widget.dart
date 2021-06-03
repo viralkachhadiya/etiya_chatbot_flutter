@@ -30,6 +30,9 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
   Widget build(BuildContext context) {
     return Chat(
       items: _messages,
+      onQuickReplyItemPressed: (item) {
+        print(item.title);
+      },
     );
   }
 }

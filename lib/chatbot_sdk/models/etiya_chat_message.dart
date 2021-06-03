@@ -4,6 +4,7 @@ import 'package:flutter_chat/models/message_kind.dart';
 import '../models/etiya_chat_user.dart';
 import '../models/api/etiya_message_response.dart';
 import '../models/etiya_quick_reply.dart';
+import '../extensions/string_extensions.dart';
 
 class EtiyaChatMessage extends Message {
   final EtiyaChatUser chatUser;
@@ -33,11 +34,17 @@ extension MessageMapper on MessageResponse {
                   payload: qr.payload ?? "unknown_payload")
           ).toList();
           if (text != null) {
+            MessageKind kind = MessageKind.text(text!);
+            if (text!.containsHTML) {
+              kind = MessageKind.html(text!);
+            }
             messages.add(
-                EtiyaChatMessage(
-                    id: msgId,
-                    isMe: false,
-                    chatUser: msgUser, messageKind: MessageKind.text(text!))
+              EtiyaChatMessage(
+                id: msgId,
+                isMe: false,
+                chatUser: msgUser,
+                messageKind: kind
+              )
             );
           }
           messages.add(EtiyaChatMessage(
@@ -46,10 +53,18 @@ extension MessageMapper on MessageResponse {
               chatUser: msgUser, messageKind: MessageKind.quickReply(items)));
         } else {
           if (text != null) {
-            messages.add(EtiyaChatMessage(
-                id: msgId,
-                isMe: false,
-                chatUser: msgUser, messageKind: MessageKind.text(text!)));
+            MessageKind kind = MessageKind.text(text!);
+            if (text!.containsHTML) {
+              kind = MessageKind.html(text!);
+            }
+            messages.add(
+                EtiyaChatMessage(
+                    id: msgId,
+                    isMe: false,
+                    chatUser: msgUser,
+                    messageKind: kind
+                )
+            );
           }
         }
         break;

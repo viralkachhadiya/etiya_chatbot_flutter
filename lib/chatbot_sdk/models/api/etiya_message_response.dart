@@ -266,7 +266,7 @@ class Payload {
           typing: json["typing"],
           markdown: json["markdown"],
           conversationId: json["conversationId"],
-          quickReplies: json["quick_replies"],
+          quickReplies:  json["quick_replies"] == null ? null : List<QuickReply>.from(json["quick_replies"].map((x) => QuickReply.fromJson(x))),
           elements: json["elements"],
           mime: json["mime"],
           url: json["url"]

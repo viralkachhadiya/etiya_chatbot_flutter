@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:etiya_chatbot_flutter/chatbot_sdk/models/api/etiya_message_response.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -50,6 +51,9 @@ class ChatViewModel {
     socket.nsp = '/chat';
     socket.on('newMessage', (json) {
       print('newMessage');
+      JsonEncoder encoder = JsonEncoder.withIndent('  ');
+      String prettyprint = encoder.convert(json["rawMessage"]);
+      print(prettyprint);
       onNewMessage?.call(MessageResponse.fromJson(json).mapToChatMessage());
     });
     socket.onConnect((_) => print('socket connected'));
