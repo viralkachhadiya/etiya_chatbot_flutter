@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+import 'package:http/http.dart' as http;
+
 import 'package:etiya_chatbot_flutter/chatbot_sdk/models/api/etiya_message_response.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:etiya_chatbot_flutter/chatbot_sdk/etiya_chatbot.dart';
 import 'package:device_info/device_info.dart';
 import 'models/etiya_chat_message.dart';
+import 'models/api/etiya_message_request.dart';
 
 enum ChatEvents {
   newMessage
@@ -25,7 +28,7 @@ class ChatViewModel {
     if (Platform.isIOS) { // import 'dart:io'
       var iosDeviceInfo = await deviceInfo.iosInfo;
       return iosDeviceInfo.identifierForVendor; // unique ID on iOS
-    } else if(Platform.isAndroid) {
+    } else if (Platform.isAndroid) {
       var androidDeviceInfo = await deviceInfo.androidInfo;
       return androidDeviceInfo.androidId; // unique ID on Android
     } else {
@@ -36,17 +39,15 @@ class ChatViewModel {
   _initializeSocket() async {
     deviceId = await _getId();
     print('socket initializing...');
-    // Socket.io
 
     IO.Socket socket = IO.io(builder.socketUrl,
         IO.OptionBuilder()
-        .disableAutoConnect()
-        .enableForceNew()
-        .setQuery({'visitorId': userId})
-        // .setExtraHeaders({'visitorId': userId})
-        .setTransports(['websocket']) // for Flutter or Dart VM
-        .setPath('/ws')
-        .build()
+            .disableAutoConnect()
+            .enableForceNew()
+            .setQuery({'visitorId': userId})
+            .setTransports(['websocket']) // for Flutter or Dart VM
+            .setPath('/ws')
+            .build()
     );
     socket.nsp = '/chat';
     socket.on('newMessage', (json) {
@@ -56,51 +57,67 @@ class ChatViewModel {
       print(prettyprint);
       onNewMessage?.call(MessageResponse.fromJson(json).mapToChatMessage());
     });
-    socket.onConnect((_) => print('socket connected'));
+    socket.onConnect((_) {
+      print('socket connected');
+      sendMessage(
+          MessageRequest(
+              text: "/user_visit",
+              user: MessageUser(senderId: userId)
+          )
+      );
+    });
     socket.onError((error) => print(error));
     socket.connect();
   }
 
   /// Send Message to Server
   /// - Parameter message: `MessageRequest` wraps the actual message (text or data)
-  // sendMessage(MessageRequest request) {
-  // print(userId);
-  // var _message = message;
-  // let urlString = self.builder.serviceUrl.appending("/mobile")
-  // guard let url = URL(string: urlString) else { return }
-  // var request = URLRequest(url: url)
-  // request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-  // request.httpMethod = "POST"
-  // var user =  MessageUser(senderId: "", displayName: "")
-  // user.userId = userId
-  // _message.user = user
-  //
-  // request.httpBody =// body.data(using: .utf8)
-  // try? JSONEncoder().encode(_message)
-  //
-  // URLSession.shared.dataTaskPublisher(for: request)
-  //     .tryMap { data, response -> Data in
-  // guard let httpResponse = response as? HTTPURLResponse,
-  // 200..<300 ~= httpResponse.statusCode else {
-  // throw EtiyaNetworkError.messageCouldNotSend
-  // }
-  // return data
-  // }
-  //     .sink { (completion) in
-  // switch completion {
-  // case .failure(let error): print("Sending message failed: \(error.localizedDescription)")
-  // case .finished: print("Send message succeeded")
-  // }
-  // } receiveValue: { (_) in
-  //
-  // }
-  //     .store(in: &cancellable)
-  //
-  // }
+  sendMessage(MessageRequest request) {
+    // print(userId);
+    http.post(
+      Uri.parse('${builder.serviceUrl}/mobile'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(request.toJson()),
+    ).then((response) {
+      if (response.statusCode > 200 && response.statusCode < 300) {
+        print("Send message succeeded");
+      } else {
+        print('Send message failed');
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+    });
+  }
 
   String get userId {
     final uid = builder.userName ?? 'chatbot_client';
     print('$uid$deviceId');
     return '$uid$deviceId';
+  }
+
+  /// Chatbot User
+  EtiyaChatUser get chatBotUser {
+    final user = EtiyaChatUser(fullName: builder.userName);
+    // if let image = builder.avatarManager.botAvatarImage {
+    //   user._avatar = image
+    // }
+    // if let imageURL = builder.avatarManager.botAvatarImageURL {
+    //   user._avatarURL = imageURL
+    // }
+    return user;
+  }
+
+  /// Customer User
+  EtiyaChatUser get customerUser {
+    final user = EtiyaChatUser(fullName: builder.userName);
+    // if let image = builder.avatarManager.userAvatarImage {
+    //   user._avatar = image
+    // }
+    // if let imageURL = builder.avatarManager.userAvatarImageURL {
+    //   user._avatarURL = imageURL
+    // }
+    return user;
   }
 }
