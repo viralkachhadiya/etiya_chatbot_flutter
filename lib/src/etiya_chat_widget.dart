@@ -1,10 +1,10 @@
-import 'package:etiya_chatbot_flutter/chatbot_sdk/models/etiya_chat_message.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat/chat.dart';
-import 'package:flutter_chat/models/message_kind.dart';
+import 'package:flutter_chat/flutter_chat.dart';
+
 import 'chat_view_model.dart';
 import 'models/api/etiya_message_request.dart';
 import 'models/api/etiya_message_response.dart';
+import 'models/etiya_chat_message.dart';
 
 class EtiyaChatWidget extends StatefulWidget {
   final ChatViewModel viewModel;

@@ -1,6 +1,6 @@
-import 'package:flutter_chat/models/IQuickReplyItem.dart';
+import 'package:flutter_chat/flutter_chat.dart';
 
-class EtiyaQuickReplyItem extends IQuickReplyItem {
+class EtiyaQuickReplyItem extends QuickReplyItem {
   final String title;
   final String? payload;
   final String? url;

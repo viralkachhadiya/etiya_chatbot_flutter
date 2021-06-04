@@ -1,7 +1,5 @@
-import 'package:flutter_chat/models/message.dart';
-import 'package:flutter_chat/models/message_kind.dart';
+import 'package:flutter_chat/flutter_chat.dart';
 
-import '../models/etiya_chat_user.dart';
 import '../models/api/etiya_message_response.dart';
 import '../models/etiya_quick_reply.dart';
 import '../extensions/string_extensions.dart';

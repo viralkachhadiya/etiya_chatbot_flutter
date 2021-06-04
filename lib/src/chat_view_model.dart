@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:http/http.dart' as http;
-
-import 'package:etiya_chatbot_flutter/chatbot_sdk/models/api/etiya_message_response.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:etiya_chatbot_flutter/chatbot_sdk/etiya_chatbot.dart';
 import 'package:device_info/device_info.dart';
-import 'models/etiya_chat_message.dart';
-import 'models/api/etiya_message_request.dart';
+
+import '../src/etiya_chatbot.dart';
+import '../src/models/api/etiya_message_response.dart';
+import '../src/models/etiya_chat_message.dart';
+import '../src/models/api/etiya_message_request.dart';
 
 enum ChatEvents {
   newMessage
