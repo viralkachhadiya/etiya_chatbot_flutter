@@ -65,14 +65,14 @@ packages:
     source: hosted
     version: "0.17.0"
   cupertino_icons:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: cupertino_icons
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
   device_info:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: device_info
       url: "https://pub.dartlang.org"
@@ -85,6 +85,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  etiya_chatbot_flutter:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -105,9 +112,9 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_chat:
-    dependency: "direct main"
+    dependency: transitive
     description:
-      path: "../flutter_chat"
+      path: "../../flutter_chat"
       relative: true
     source: path
     version: "0.0.1"
@@ -157,7 +164,7 @@ packages:
     source: hosted
     version: "0.15.0"
   http:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: http
       url: "https://pub.dartlang.org"
@@ -281,7 +288,7 @@ packages:
     source: sdk
     version: "0.0.99"
   socket_io_client:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: socket_io_client
       url: "https://pub.dartlang.org"
