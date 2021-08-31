@@ -17,10 +17,12 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   final EtiyaChatbot _etiyaChatbot = EtiyaChatbotBuilder()
-  // .setWelcomeMessage("Merhaba, size nasıl yardımcı olabilirim")
+      // .setWelcomeMessage("Merhaba, size nasıl yardımcı olabilirim")
       .setUserName("enesKaraosman")
-  // .setStyle(style)
-  // .setAvatarManager(avatarManager)
+      .setIncomingAvatar(
+        UserAvatar(imageURL: Uri.parse('https://i.pravatar.cc/300')),
+      )
+      // .setStyle(style)
       .setSocketUrl("https://chatbotbo-demo8.serdoo.com/chat")
       .setServiceUrl("https://chatbotbo-demo8.serdoo.com/api/chat")
       .build();

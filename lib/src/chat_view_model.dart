@@ -55,7 +55,10 @@ class ChatViewModel {
       JsonEncoder encoder = JsonEncoder.withIndent('  ');
       String prettyPrint = encoder.convert(json["rawMessage"]);
       debugPrint(prettyPrint);
-      onNewMessage?.call(MessageResponse.fromJson(json).mapToChatMessage());
+      var messageResponse = MessageResponse.fromJson(json);
+      messageResponse.user?.fullName = builder.userName;
+      messageResponse.user?.avatar = builder.incomingAvatar;
+      onNewMessage?.call(messageResponse.mapToChatMessage());
     });
     _socket.onConnect((_) {
       debugPrint('socket connected');
@@ -98,26 +101,12 @@ class ChatViewModel {
   }
 
   /// Chatbot User
-  EtiyaChatUser get chatBotUser {
-    final user = EtiyaChatUser(fullName: builder.userName);
-    // if let image = builder.avatarManager.botAvatarImage {
-    //   user._avatar = image
-    // }
-    // if let imageURL = builder.avatarManager.botAvatarImageURL {
-    //   user._avatarURL = imageURL
-    // }
-    return user;
-  }
+  late EtiyaChatUser chatBotUser;
 
   /// Customer User
   EtiyaChatUser get customerUser {
-    final user = EtiyaChatUser(fullName: builder.userName);
-    // if let image = builder.avatarManager.userAvatarImage {
-    //   user._avatar = image
-    // }
-    // if let imageURL = builder.avatarManager.userAvatarImageURL {
-    //   user._avatarURL = imageURL
-    // }
+    var user = EtiyaChatUser(fullName: builder.userName);
+    user.avatar = builder.outgoingAvatar;
     return user;
   }
 }

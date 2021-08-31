@@ -1,5 +1,6 @@
 import 'package:etiya_chatbot_flutter/src/util/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat/flutter_chat.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'chat_view_model.dart';
@@ -22,6 +23,8 @@ class EtiyaChatbotBuilder {
   String? serviceUrl;
   String? socketUrl;
   String? authUrl;
+  UserAvatar? outgoingAvatar;
+  UserAvatar? incomingAvatar;
 
   EtiyaChatbotBuilder() {
     setDeviceID();
@@ -59,6 +62,18 @@ class EtiyaChatbotBuilder {
   /// The connection URL for ldap authorization.
   EtiyaChatbotBuilder setAuthUrl(String url) {
     this.authUrl = url;
+    return this;
+  }
+
+  /// Avatar configuration for incoming messages.
+  EtiyaChatbotBuilder setIncomingAvatar(UserAvatar avatar) {
+    this.incomingAvatar = avatar;
+    return this;
+  }
+
+  /// Avatar configuration for outgoing messages.
+  EtiyaChatbotBuilder setOutgoingAvatar(UserAvatar avatar) {
+    this.outgoingAvatar = avatar;
     return this;
   }
 
