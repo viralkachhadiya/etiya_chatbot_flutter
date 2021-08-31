@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   final EtiyaChatbot _etiyaChatbot = EtiyaChatbotBuilder()
   // .setWelcomeMessage("Merhaba, size nasıl yardımcı olabilirim")
-      .setUserName("chatbot_client")
+      .setUserName("enesKaraosman")
   // .setStyle(style)
   // .setAvatarManager(avatarManager)
       .setSocketUrl("https://chatbotbo-demo8.serdoo.com/chat")

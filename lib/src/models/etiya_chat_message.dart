@@ -105,6 +105,6 @@ extension MessageMapper on MessageResponse {
         }
         break;
     }
-    return messages;
+    return messages.reversed.toList();
   }
 }

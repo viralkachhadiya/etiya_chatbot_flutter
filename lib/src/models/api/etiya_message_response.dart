@@ -300,7 +300,7 @@ class EtiyaChatUser extends ChatUser {
     this.createdOn,
     this.userType,
     this.platformId,
-  }): super(userName: fullName ?? "", avatarURL: null);
+  }): super(userName: fullName ?? "", avatar: null);
 
   String? fullName;
   bool? isOnline;

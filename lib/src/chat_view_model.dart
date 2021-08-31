@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'dart:io' show Platform;
+import 'package:etiya_chatbot_flutter/src/util/constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:device_info/device_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../src/etiya_chatbot.dart';
 import '../src/models/api/etiya_message_response.dart';
@@ -15,7 +16,8 @@ enum ChatEvents {
 
 class ChatViewModel {
   final EtiyaChatbotBuilder builder;
-  String deviceId = '';
+  String _deviceId = '';
+  late IO.Socket _socket;
 
   void Function(List<EtiyaChatMessage>)? onNewMessage;
 
@@ -23,42 +25,40 @@ class ChatViewModel {
     _initializeSocket();
   }
 
-  Future<String> _getId() async {
-    var deviceInfo = DeviceInfoPlugin();
-    if (Platform.isIOS) { // import 'dart:io'
-      var iosDeviceInfo = await deviceInfo.iosInfo;
-      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
-    } else if (Platform.isAndroid) {
-      var androidDeviceInfo = await deviceInfo.androidInfo;
-      return androidDeviceInfo.androidId; // unique ID on Android
-    } else {
-      return '';
-    }
+  void dispose() {
+    _socket.clearListeners();
+    _socket.close();
+  }
+
+  Future<String> _getDeviceID() async {
+    final sp = await SharedPreferences.getInstance();
+    return Future(() => sp.getString(Constants.deviceIDKey) ?? 'unset id');
   }
 
   _initializeSocket() async {
-    deviceId = await _getId();
-    print('socket initializing...');
+    _deviceId = await _getDeviceID();
+    debugPrint("deviceID: $_deviceId");
+    debugPrint('socket initializing...');
 
-    IO.Socket socket = IO.io(builder.socketUrl,
+    _socket = IO.io(builder.socketUrl,
         IO.OptionBuilder()
-            .disableAutoConnect()
+            // .disableAutoConnect()
             .enableForceNew()
             .setQuery({'visitorId': userId})
             .setTransports(['websocket']) // for Flutter or Dart VM
             .setPath('/ws')
             .build()
     );
-    socket.nsp = '/chat';
-    socket.on('newMessage', (json) {
-      print('newMessage');
+    _socket.nsp = '/chat';
+    _socket.on('newMessage', (json) {
+      debugPrint('newMessage');
       JsonEncoder encoder = JsonEncoder.withIndent('  ');
-      String prettyprint = encoder.convert(json["rawMessage"]);
-      print(prettyprint);
+      String prettyPrint = encoder.convert(json["rawMessage"]);
+      debugPrint(prettyPrint);
       onNewMessage?.call(MessageResponse.fromJson(json).mapToChatMessage());
     });
-    socket.onConnect((_) {
-      print('socket connected');
+    _socket.onConnect((_) {
+      debugPrint('socket connected');
       sendMessage(
           MessageRequest(
               text: "/user_visit",
@@ -66,8 +66,8 @@ class ChatViewModel {
           )
       );
     });
-    socket.onError((error) => print(error));
-    socket.connect();
+    _socket.onError((error) => print(error));
+    _socket.connect();
   }
 
   /// Send Message to Server
@@ -93,8 +93,8 @@ class ChatViewModel {
 
   String get userId {
     final uid = builder.userName ?? 'chatbot_client';
-    print('$uid$deviceId');
-    return '$uid$deviceId';
+    debugPrint('$uid$_deviceId');
+    return '$uid$_deviceId';
   }
 
   /// Chatbot User

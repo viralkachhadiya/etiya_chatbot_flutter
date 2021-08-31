@@ -22,10 +22,16 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
   void initState() {
     widget.viewModel.onNewMessage = (messages) {
       setState(() {
-        _messages.addAll(messages);
+        _messages.insertAll(0, messages);
       });
     };
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.viewModel.dispose();
   }
 
   @override
