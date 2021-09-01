@@ -1,10 +1,10 @@
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
-import 'package:etiya_chatbot_flutter/src/models/etiya_carousel_item.dart';
 import 'package:flutter_chat/flutter_chat.dart';
 
-import '../models/api/etiya_message_response.dart';
-import '../models/etiya_quick_reply.dart';
 import '../extensions/string_extensions.dart';
+import '../models/api/etiya_message_response.dart';
+import '../models/etiya_carousel_item.dart';
+import '../models/etiya_quick_reply.dart';
 
 class EtiyaChatMessage extends Message {
   final EtiyaChatUser chatUser;
@@ -12,12 +12,17 @@ class EtiyaChatMessage extends Message {
   final bool isMe;
   final MessageKind messageKind;
 
-  const EtiyaChatMessage(
-      {required this.chatUser,
-      required this.id,
-      required this.isMe,
-      required this.messageKind})
-      : super(user: chatUser, id: id, isMe: isMe, messageKind: messageKind);
+  const EtiyaChatMessage({
+    required this.chatUser,
+    required this.id,
+    required this.isMe,
+    required this.messageKind,
+  }) : super(
+          user: chatUser,
+          id: id,
+          isMe: isMe,
+          messageKind: messageKind,
+        );
 }
 
 extension MessageMapper on MessageResponse {
@@ -30,31 +35,49 @@ extension MessageMapper on MessageResponse {
         if (hasQuickReply) {
           var quickReplies = rawMessage?.data?.payload?.quickReplies ?? [];
           List<EtiyaQuickReplyItem> items = quickReplies
-              .map((qr) => EtiyaQuickReplyItem(
+              .map(
+                (qr) => EtiyaQuickReplyItem(
                   title: qr.title ?? "",
-                  payload: qr.payload ?? "unknown_payload"))
+                  payload: qr.payload ?? "unknown_payload",
+                ),
+              )
               .toList();
           if (text != null) {
             MessageKind kind = MessageKind.text(text!);
             if (text!.containsHTML) {
               kind = MessageKind.html(text!);
             }
-            messages.add(EtiyaChatMessage(
-                id: msgId, isMe: false, chatUser: msgUser, messageKind: kind));
+            messages.add(
+              EtiyaChatMessage(
+                id: msgId,
+                isMe: false,
+                chatUser: msgUser,
+                messageKind: kind,
+              ),
+            );
           }
-          messages.add(EtiyaChatMessage(
+          messages.add(
+            EtiyaChatMessage(
               id: msgId,
               isMe: false,
               chatUser: msgUser,
-              messageKind: MessageKind.quickReply(items)));
+              messageKind: MessageKind.quickReply(items),
+            ),
+          );
         } else {
           if (text != null) {
             MessageKind kind = MessageKind.text(text!);
             if (text!.containsHTML) {
               kind = MessageKind.html(text!);
             }
-            messages.add(EtiyaChatMessage(
-                id: msgId, isMe: false, chatUser: msgUser, messageKind: kind));
+            messages.add(
+              EtiyaChatMessage(
+                id: msgId,
+                isMe: false,
+                chatUser: msgUser,
+                messageKind: kind,
+              ),
+            );
           }
         }
         break;
@@ -72,7 +95,10 @@ extension MessageMapper on MessageResponse {
 
           final List<CarouselButtonItem> carouselButtons = buttons.map((btn) {
             return CarouselButtonItem(
-                title: btn.title ?? '', url: btn.url, payload: btn.payload);
+              title: btn.title ?? '',
+              url: btn.url,
+              payload: btn.payload,
+            );
           }).toList();
 
           return EtiyaCarouselItem(
@@ -81,7 +107,6 @@ extension MessageMapper on MessageResponse {
             imageURL: url,
             buttons: carouselButtons,
           );
-          // if (buttons.is)
         }).toList();
 
         messages.add(
