@@ -20,7 +20,12 @@ class MyHomePage extends StatefulWidget {
       // .setWelcomeMessage("Merhaba, size nasıl yardımcı olabilirim")
       .setUserName("enesKaraosman")
       .setIncomingAvatar(
-        UserAvatar(imageURL: Uri.parse('https://i.pravatar.cc/300')),
+        UserAvatar(
+          size: 36,
+          imageURL: Uri.parse(
+            'https://i.pravatar.cc/300',
+          ),
+        ),
       )
       // .setStyle(style)
       .setSocketUrl("https://chatbotbo-demo8.serdoo.com/chat")
