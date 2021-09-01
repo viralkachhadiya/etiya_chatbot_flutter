@@ -188,7 +188,7 @@ class Element {
   factory Element.fromJson(Map<String, dynamic> json) =>
       Element(
           title: json["title"],
-          buttons: json["buttons"],
+          buttons: json["buttons"] == null ? null : List<CarouselButton>.from(json["buttons"].map((x) => CarouselButton.fromJson(x))),
           picture: json["picture"],
           subtitle: json["subtitle"]
       );
@@ -204,23 +204,29 @@ class Element {
 
 // MARK: - CarouselButton 👍🏻
 class CarouselButton {
-  CarouselButton({this.url, this.title});
+  CarouselButton({
+    this.url,
+    this.title,
+    this.payload,
+  });
 
   String? url;
   String? title;
+  String? payload;
 
-  factory CarouselButton.fromJson(Map<String, dynamic> json) =>
-      CarouselButton(
-          url: json["url"],
-          title: json["title"]
-      );
+  factory CarouselButton.fromJson(Map<String, dynamic> json) => CarouselButton(
+    url: json["url"] == null ? null : json["url"],
+    title: json["title"] == null ? null : json["title"],
+    payload: json["payload"] == null ? null : json["payload"],
+  );
 
-  Map<String, dynamic> toJson() =>
-      {
-        "url": url,
-        "title": title
-      };
+  Map<String, dynamic> toJson() => {
+    "url": url == null ? null : url,
+    "title": title == null ? null : title,
+    "payload": payload == null ? null : payload,
+  };
 }
+
 
 // MARK: - QuickReply 👍🏻
 class QuickReply {
@@ -267,7 +273,7 @@ class Payload {
           markdown: json["markdown"],
           conversationId: json["conversationId"],
           quickReplies:  json["quick_replies"] == null ? null : List<QuickReply>.from(json["quick_replies"].map((x) => QuickReply.fromJson(x))),
-          elements: json["elements"],
+          elements: json["elements"] == null ? null : List<Element>.from(json["elements"].map((x) => Element.fromJson(x))),
           mime: json["mime"],
           url: json["url"]
       );
