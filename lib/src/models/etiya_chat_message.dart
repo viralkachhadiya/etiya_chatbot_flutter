@@ -121,15 +121,16 @@ extension MessageMapper on MessageResponse {
 
       case 'file':
         if (hasImage) {
-          // String url = rawMessage?.data?.payload?.url;
-          // Uri? imageURL = Uri(path: url);
-          //
-          // messages.add(
-          //     EtiyaChatMessage(
-          //         id: msgId,
-          //         isMe: false,
-          //         chatUser: msgUser, messageKind: MessageKind.image(imageURL))
-          // );
+          String? url = rawMessage?.data?.payload?.url;
+          if (url == null) break;
+          messages.add(
+            EtiyaChatMessage(
+              id: msgId,
+              isMe: false,
+              chatUser: msgUser,
+              messageKind: MessageKind.image(url),
+            ),
+          );
         }
         break;
     }
