@@ -17,6 +17,7 @@ class EtiyaChatWidget extends StatefulWidget {
 
 class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
   List<EtiyaChatMessage> _messages = [];
+  late Chat _chatView;
 
   @override
   void initState() {
@@ -24,6 +25,7 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
       setState(() {
         _messages.insertAll(0, messages);
       });
+      _chatView.scrollToBottom();
     };
     super.initState();
   }
@@ -36,7 +38,7 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Chat(
+    _chatView = Chat(
       messages: _messages,
       theme: ThemeData.dark(),
       messageCellSizeConfigurator:
@@ -46,6 +48,7 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
       ),
     )
     .setOnQuickReplyItemPressed(quickReplyPressedAction);
+    return _chatView;
   }
 
   void sendButtonPressedAction(String text) {
@@ -63,7 +66,8 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
           messageKind: MessageKind.text(text),
           chatUser: widget.viewModel.customerUser));
     });
-    print(text);
+    debugPrint(text);
+    _chatView.scrollToBottom();
   }
 
   void quickReplyPressedAction(QuickReplyItem item) {
@@ -85,6 +89,7 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
           messageKind: MessageKind.text(item.title),
           chatUser: widget.viewModel.customerUser));
     });
-    print(item.payload);
+    debugPrint(item.payload);
+    _chatView.scrollToBottom();
   }
 }
