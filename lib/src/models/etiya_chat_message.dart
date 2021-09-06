@@ -27,14 +27,14 @@ class EtiyaChatMessage extends Message {
 
 extension MessageMapper on MessageResponse {
   List<EtiyaChatMessage> mapToChatMessage() {
-    List<EtiyaChatMessage> messages = [];
-    var msgId = id ?? DateTime.now().toString();
-    EtiyaChatUser msgUser = user ?? EtiyaChatUser();
+    final List<EtiyaChatMessage> messages = [];
+    final msgId = id ?? DateTime.now().toString();
+    final EtiyaChatUser msgUser = user ?? EtiyaChatUser();
     switch (type) {
       case 'text':
         if (hasQuickReply) {
-          var quickReplies = rawMessage?.data?.payload?.quickReplies ?? [];
-          List<EtiyaQuickReplyItem> items = quickReplies
+          final quickReplies = rawMessage?.data?.payload?.quickReplies ?? [];
+          final List<EtiyaQuickReplyItem> items = quickReplies
               .map(
                 (qr) => EtiyaQuickReplyItem(
                   title: qr.title ?? "",

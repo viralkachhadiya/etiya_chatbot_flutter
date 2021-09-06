@@ -19,6 +19,7 @@ class MyHomePage extends StatefulWidget {
   final EtiyaChatbot _etiyaChatbot = EtiyaChatbotBuilder()
       // .setWelcomeMessage("Merhaba, size nasıl yardımcı olabilirim")
       .setUserName("enesKaraosman")
+      .setLoggingEnabled(true)
       .setIncomingAvatar(
         UserAvatar(
           size: 36,

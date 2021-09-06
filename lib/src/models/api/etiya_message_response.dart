@@ -1,13 +1,4 @@
-// To parse this JSON data, do
-//
-//     final messageResponse = messageResponseFromJson(jsonString);
-
 import 'package:swifty_chat/swifty_chat.dart';
-import 'dart:convert';
-
-// MessageResponse messageResponseFromJson(String str) => MessageResponse.fromJson(json.decode(str));
-
-// String messageResponseToJson(MessageResponse data) => json.encode(data.toJson());
 
 class MessageResponse {
   MessageResponse({
@@ -64,7 +55,7 @@ class MessageResponse {
       };
 
   bool get hasQuickReply {
-    var qrCount = rawMessage?.data?.payload?.quickReplies?.length ?? 0;
+    final qrCount = rawMessage?.data?.payload?.quickReplies?.length ?? 0;
     return type == 'text' && qrCount != 0;
   }
 
@@ -221,9 +212,9 @@ class CarouselButton {
   );
 
   Map<String, dynamic> toJson() => {
-    "url": url == null ? null : url,
-    "title": title == null ? null : title,
-    "payload": payload == null ? null : payload,
+    "url": url,
+    "title": title,
+    "payload": payload
   };
 }
 
@@ -322,9 +313,8 @@ class EtiyaChatUser extends ChatUser {
   String? userType;
   String? platformId;
 
-  String get userName {
-    return fullName ?? 'userName';
-  }
+  @override
+  String get userName => fullName ?? 'userName';
 
   Uri? get avatarURL {
     return null;

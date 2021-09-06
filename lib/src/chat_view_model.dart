@@ -1,14 +1,14 @@
 import 'dart:convert';
-import 'package:etiya_chatbot_flutter/src/util/constants.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:http/http.dart' as http;
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../src/etiya_chatbot.dart';
+import '../src/models/api/etiya_message_request.dart';
 import '../src/models/api/etiya_message_response.dart';
 import '../src/models/etiya_chat_message.dart';
-import '../src/models/api/etiya_message_request.dart';
+import '../src/util/constants.dart';
 
 enum ChatEvents {
   newMessage
@@ -35,14 +35,14 @@ class ChatViewModel {
     return Future(() => sp.getString(Constants.deviceIDKey) ?? 'unset id');
   }
 
-  _initializeSocket() async {
+  void _initializeSocket() async {
     _deviceId = await _getDeviceID();
-    debugPrint("deviceID: $_deviceId");
-    debugPrint('socket initializing...');
+
+    logger.info("DeviceID fetched: $_deviceId");
+    logger.info('Socket initializing...');
 
     _socket = IO.io(builder.socketUrl,
         IO.OptionBuilder()
-            // .disableAutoConnect()
             .enableForceNew()
             .setQuery({'visitorId': userId})
             .setTransports(['websocket']) // for Flutter or Dart VM
@@ -51,17 +51,17 @@ class ChatViewModel {
     );
     _socket.nsp = '/chat';
     _socket.on('newMessage', (json) {
-      debugPrint('newMessage');
-      JsonEncoder encoder = JsonEncoder.withIndent('  ');
-      String prettyPrint = encoder.convert(json["rawMessage"]);
-      debugPrint(prettyPrint);
-      var messageResponse = MessageResponse.fromJson(json);
+      logger.info('newMessage event received');
+      const JsonEncoder encoder = JsonEncoder.withIndent('  ');
+      final String prettyPrint = encoder.convert(json["rawMessage"]);
+      // logger.info(prettyPrint);
+      final messageResponse = MessageResponse.fromJson(json);
       messageResponse.user?.fullName = builder.userName;
       messageResponse.user?.avatar = builder.incomingAvatar;
       onNewMessage?.call(messageResponse.mapToChatMessage());
     });
     _socket.onConnect((_) {
-      debugPrint('socket connected');
+      logger.info('Socket connection is successful');
       sendMessage(
           MessageRequest(
               text: "/user_visit",
@@ -69,14 +69,13 @@ class ChatViewModel {
           )
       );
     });
-    _socket.onError((error) => print(error));
+    _socket.onError((error) => logger.severe(error));
     _socket.connect();
   }
 
   /// Send Message to Server
   /// - Parameter message: `MessageRequest` wraps the actual message (text or data)
-  sendMessage(MessageRequest request) {
-    // print(userId);
+  void sendMessage(MessageRequest request) {
     http.post(
       Uri.parse('${builder.serviceUrl}/mobile'),
       headers: <String, String>{
@@ -85,18 +84,18 @@ class ChatViewModel {
       body: jsonEncode(request.toJson()),
     ).then((response) {
       if (response.statusCode > 200 && response.statusCode < 300) {
-        print("Send message succeeded");
+        logger.info("User's message sent successfully");
       } else {
-        print('Send message failed');
+        logger.severe("User's message could not sent, statusCode: ${response.statusCode}");
       }
     }).onError((error, stackTrace) {
-      print(error);
+      logger.severe(error);
     });
   }
 
   String get userId {
     final uid = builder.userName ?? 'chatbot_client';
-    debugPrint('$uid$_deviceId');
+    logger.info('userId: $uid$_deviceId that is used to communicate with socket');
     return '$uid$_deviceId';
   }
 
@@ -105,7 +104,7 @@ class ChatViewModel {
 
   /// Customer User
   EtiyaChatUser get customerUser {
-    var user = EtiyaChatUser(fullName: builder.userName);
+    final user = EtiyaChatUser(fullName: builder.userName);
     user.avatar = builder.outgoingAvatar;
     return user;
   }

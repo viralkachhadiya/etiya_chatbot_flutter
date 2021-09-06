@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swifty_chat/swifty_chat.dart';
 
+import '../etiya_chatbot_flutter.dart';
 import 'chat_view_model.dart';
 import 'models/api/etiya_message_request.dart';
 import 'models/api/etiya_message_response.dart';
@@ -16,7 +17,7 @@ class EtiyaChatWidget extends StatefulWidget {
 }
 
 class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
-  List<EtiyaChatMessage> _messages = [];
+  final List<EtiyaChatMessage> _messages = [];
   late Chat _chatView;
 
   @override
@@ -66,7 +67,7 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
           messageKind: MessageKind.text(text),
           chatUser: widget.viewModel.customerUser));
     });
-    debugPrint(text);
+    logger.info(text);
     _chatView.scrollToBottom();
   }
 
@@ -89,7 +90,7 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
           messageKind: MessageKind.text(item.title),
           chatUser: widget.viewModel.customerUser));
     });
-    debugPrint(item.payload);
+    logger.info(item.payload);
     _chatView.scrollToBottom();
   }
 }

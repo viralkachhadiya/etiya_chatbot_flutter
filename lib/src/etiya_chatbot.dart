@@ -1,10 +1,14 @@
-import 'package:etiya_chatbot_flutter/src/util/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:swifty_chat/swifty_chat.dart';
+import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swifty_chat/swifty_chat.dart';
 import 'package:uuid/uuid.dart';
+
+import '../src/util/constants.dart';
 import 'chat_view_model.dart';
 import 'etiya_chat_widget.dart';
+
+Logger logger = Logger('Chatbot');
 
 class EtiyaChatbot {
   final EtiyaChatbotBuilder builder;
@@ -25,6 +29,7 @@ class EtiyaChatbotBuilder {
 
   EtiyaChatbotBuilder() {
     setDeviceID();
+    setLoggingEnabled();
   }
 
   Future<void> setDeviceID() async {
@@ -32,49 +37,60 @@ class EtiyaChatbotBuilder {
     final sp = await SharedPreferences.getInstance();
     final deviceID = sp.getString(preferenceKey);
     if (deviceID == null) {
-      final uuid = Uuid().v1();
+      final uuid = const Uuid().v1();
       sp.setString(preferenceKey, uuid);
-      debugPrint("deviceID: $uuid is saved to DB");
+      logger.info("deviceID: $uuid is saved to DB");
     }
   }
 
   /// Behaves like unique id to distinguish chats for backend.
   EtiyaChatbotBuilder setUserName(String name) {
-    this.userName = name;
+    userName = name;
     return this;
   }
 
   /// The connection URL for messages to be sent.
   EtiyaChatbotBuilder setServiceUrl(String url) {
-    this.serviceUrl = url;
+    serviceUrl = url;
     return this;
   }
 
   /// The connection URL for socket.
   EtiyaChatbotBuilder setSocketUrl(String url) {
-    this.socketUrl = url;
+    socketUrl = url;
     return this;
   }
 
   /// The connection URL for ldap authorization.
   EtiyaChatbotBuilder setAuthUrl(String url) {
-    this.authUrl = url;
+    authUrl = url;
     return this;
   }
 
   /// Avatar configuration for incoming messages.
   EtiyaChatbotBuilder setIncomingAvatar(UserAvatar avatar) {
-    this.incomingAvatar = avatar;
+    incomingAvatar = avatar;
     return this;
   }
 
   /// Avatar configuration for outgoing messages.
   EtiyaChatbotBuilder setOutgoingAvatar(UserAvatar avatar) {
-    this.outgoingAvatar = avatar;
+    outgoingAvatar = avatar;
     return this;
   }
 
-  EtiyaChatbot build() {
-    return EtiyaChatbot(builder: this);
+  /// Configuration for logging internal events, disabled by default.
+  EtiyaChatbotBuilder setLoggingEnabled([bool enabled = false]) {
+    if (!enabled) {
+      Logger.root.level = Level.OFF;
+      return this;
+    }
+    Logger.root.level = Level.ALL;
+    Logger.root.onRecord.listen((record) {
+      debugPrint('${record.level.name}: ${record.time}: ${record.message}');
+    });
+    return this;
   }
+
+  EtiyaChatbot build() => EtiyaChatbot(builder: this);
 }
