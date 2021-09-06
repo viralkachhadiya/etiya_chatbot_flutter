@@ -1,5 +1,5 @@
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
-import 'package:flutter_chat/flutter_chat.dart';
+import 'package:swifty_chat/swifty_chat.dart';
 
 import '../extensions/string_extensions.dart';
 import '../models/api/etiya_message_response.dart';

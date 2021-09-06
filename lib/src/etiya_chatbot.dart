@@ -1,6 +1,6 @@
 import 'package:etiya_chatbot_flutter/src/util/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat/flutter_chat.dart';
+import 'package:swifty_chat/swifty_chat.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'chat_view_model.dart';
@@ -11,11 +11,8 @@ class EtiyaChatbot {
 
   EtiyaChatbot({required this.builder});
 
-  Widget getChatWidget(ChatViewModel viewModel) {
-    return EtiyaChatWidget(
-      viewModel: viewModel,
-    );
-  }
+  Widget getChatWidget(ChatViewModel viewModel) =>
+      EtiyaChatWidget(viewModel: viewModel);
 }
 
 class EtiyaChatbotBuilder {
@@ -29,7 +26,7 @@ class EtiyaChatbotBuilder {
   EtiyaChatbotBuilder() {
     setDeviceID();
   }
-  
+
   Future<void> setDeviceID() async {
     const preferenceKey = Constants.deviceIDKey;
     final sp = await SharedPreferences.getInstance();

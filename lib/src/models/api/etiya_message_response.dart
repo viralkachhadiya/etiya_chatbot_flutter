@@ -2,7 +2,7 @@
 //
 //     final messageResponse = messageResponseFromJson(jsonString);
 
-import 'package:flutter_chat/flutter_chat.dart';
+import 'package:swifty_chat/swifty_chat.dart';
 import 'dart:convert';
 
 // MessageResponse messageResponseFromJson(String str) => MessageResponse.fromJson(json.decode(str));

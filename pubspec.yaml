@@ -17,8 +17,8 @@ dependencies:
   uuid: 3.0.4
   http: ^0.13.3
 
-  flutter_chat:
-    path: "../flutter_chat"
+  swifty_chat:
+    path: ../swifty_chat
 
 dev_dependencies:
   flutter_test:

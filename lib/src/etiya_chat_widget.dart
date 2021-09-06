@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chat/flutter_chat.dart';
+import 'package:swifty_chat/swifty_chat.dart';
 
 import 'chat_view_model.dart';
 import 'models/api/etiya_message_request.dart';
@@ -40,7 +40,7 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
   Widget build(BuildContext context) {
     _chatView = Chat(
       messages: _messages,
-      theme: ThemeData.dark(),
+      theme: DefaultChatTheme(),
       messageCellSizeConfigurator:
       MessageCellSizeConfigurator.defaultConfiguration,
       chatMessageInputField: MessageInputField(
