@@ -6,6 +6,7 @@ import 'chat_view_model.dart';
 import 'models/api/etiya_message_request.dart';
 import 'models/api/etiya_message_response.dart';
 import 'models/etiya_chat_message.dart';
+import 'util/logger.dart';
 
 class EtiyaChatWidget extends StatefulWidget {
   final ChatViewModel viewModel;
@@ -67,7 +68,7 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
           messageKind: MessageKind.text(text),
           chatUser: widget.viewModel.customerUser));
     });
-    logger.info(text);
+    Log.info(text);
     _chatView.scrollToBottom();
   }
 
@@ -90,7 +91,7 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
           messageKind: MessageKind.text(item.title),
           chatUser: widget.viewModel.customerUser));
     });
-    logger.info(item.payload);
+    Log.info(item.payload);
     _chatView.scrollToBottom();
   }
 }

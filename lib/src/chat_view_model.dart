@@ -9,6 +9,7 @@ import '../src/models/api/etiya_message_request.dart';
 import '../src/models/api/etiya_message_response.dart';
 import '../src/models/etiya_chat_message.dart';
 import '../src/util/constants.dart';
+import '../src/util/logger.dart';
 
 enum ChatEvents {
   newMessage
@@ -38,8 +39,8 @@ class ChatViewModel {
   void _initializeSocket() async {
     _deviceId = await _getDeviceID();
 
-    logger.info("DeviceID fetched: $_deviceId");
-    logger.info('Socket initializing...');
+    Log.info("DeviceID fetched: $_deviceId");
+    Log.info('Socket initializing...');
 
     _socket = IO.io(builder.socketUrl,
         IO.OptionBuilder()
@@ -51,7 +52,7 @@ class ChatViewModel {
     );
     _socket.nsp = '/chat';
     _socket.on('newMessage', (json) {
-      logger.info('newMessage event received');
+      Log.info('newMessage event received');
       const JsonEncoder encoder = JsonEncoder.withIndent('  ');
       final String prettyPrint = encoder.convert(json["rawMessage"]);
       // logger.info(prettyPrint);
@@ -61,7 +62,7 @@ class ChatViewModel {
       onNewMessage?.call(messageResponse.mapToChatMessage());
     });
     _socket.onConnect((_) {
-      logger.info('Socket connection is successful');
+      Log.info('Socket connection is successful');
       sendMessage(
           MessageRequest(
               text: "/user_visit",
@@ -69,7 +70,7 @@ class ChatViewModel {
           )
       );
     });
-    _socket.onError((error) => logger.severe(error));
+    _socket.onError((error) => Log.error(error));
     _socket.connect();
   }
 
@@ -84,18 +85,18 @@ class ChatViewModel {
       body: jsonEncode(request.toJson()),
     ).then((response) {
       if (response.statusCode > 200 && response.statusCode < 300) {
-        logger.info("User's message sent successfully");
+        Log.info("User's message sent successfully");
       } else {
-        logger.severe("User's message could not sent, statusCode: ${response.statusCode}");
+        Log.error("User's message could not sent, statusCode: ${response.statusCode}");
       }
     }).onError((error, stackTrace) {
-      logger.severe(error);
+      Log.error(error.toString());
     });
   }
 
   String get userId {
     final uid = builder.userName ?? 'chatbot_client';
-    logger.info('userId: $uid$_deviceId that is used to communicate with socket');
+    Log.info('userId: $uid$_deviceId that is used to communicate with socket');
     return '$uid$_deviceId';
   }
 

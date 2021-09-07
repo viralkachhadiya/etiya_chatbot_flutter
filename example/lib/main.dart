@@ -19,12 +19,12 @@ class MyHomePage extends StatefulWidget {
   final EtiyaChatbot _etiyaChatbot = EtiyaChatbotBuilder()
       // .setWelcomeMessage("Merhaba, size nasıl yardımcı olabilirim")
       .setUserName("enesKaraosman")
-      .setLoggingEnabled(true)
+      .setLoggingEnabled(false)
       .setIncomingAvatar(
         UserAvatar(
           size: 36,
           imageURL: Uri.parse(
-            'https://i.pravatar.cc/300',
+            'https://www.softronic.se/wp-content/uploads/2020/03/avatar_chatbot.png',
           ),
         ),
       )

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swifty_chat/swifty_chat.dart';
 import 'package:uuid/uuid.dart';
 
 import '../src/util/constants.dart';
+import '../src/util/logger.dart';
 import 'chat_view_model.dart';
 import 'etiya_chat_widget.dart';
-
-Logger logger = Logger('Chatbot');
 
 class EtiyaChatbot {
   final EtiyaChatbotBuilder builder;
@@ -39,7 +37,7 @@ class EtiyaChatbotBuilder {
     if (deviceID == null) {
       final uuid = const Uuid().v1();
       sp.setString(preferenceKey, uuid);
-      logger.info("deviceID: $uuid is saved to DB");
+      Log.info("deviceID: $uuid is saved to DB");
     }
   }
 
@@ -81,14 +79,7 @@ class EtiyaChatbotBuilder {
 
   /// Configuration for logging internal events, disabled by default.
   EtiyaChatbotBuilder setLoggingEnabled([bool enabled = false]) {
-    if (!enabled) {
-      Logger.root.level = Level.OFF;
-      return this;
-    }
-    Logger.root.level = Level.ALL;
-    Logger.root.onRecord.listen((record) {
-      debugPrint('${record.level.name}: ${record.time}: ${record.message}');
-    });
+    Log.isEnabled = enabled;
     return this;
   }
 
