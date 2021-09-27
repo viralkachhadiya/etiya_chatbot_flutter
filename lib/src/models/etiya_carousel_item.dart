@@ -1,19 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:swifty_chat/swifty_chat.dart';
 
 class EtiyaCarouselItem extends CarouselItem {
   final String title;
   final String subtitle;
-  final String? imageURL;
+  final ImageProvider? imageProvider;
   final List<CarouselButtonItem> buttons;
 
   const EtiyaCarouselItem({
     required this.title,
     required this.subtitle,
-    this.imageURL,
+    this.imageProvider,
     this.buttons = const [],
   }) : super(
             title: title,
             subtitle: subtitle,
-            imageURL: imageURL,
+            imageProvider: imageProvider,
             buttons: buttons);
 }

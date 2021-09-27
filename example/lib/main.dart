@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,7 +23,7 @@ class MyHomePage extends StatefulWidget {
       .setIncomingAvatar(
         UserAvatar(
           size: 36,
-          imageURL: Uri.parse(
+          imageProvider: const NetworkImage(
             'https://www.softronic.se/wp-content/uploads/2020/03/avatar_chatbot.png',
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
+import 'package:flutter/material.dart';
 import 'package:swifty_chat/swifty_chat.dart';
 
 import '../extensions/string_extensions.dart';
@@ -104,7 +105,7 @@ extension MessageMapper on MessageResponse {
           return EtiyaCarouselItem(
             title: title,
             subtitle: subtitle,
-            imageURL: url,
+            imageProvider: NetworkImage(url ?? ""),
             buttons: carouselButtons,
           );
         }).toList();
@@ -128,7 +129,9 @@ extension MessageMapper on MessageResponse {
               id: msgId,
               isMe: false,
               chatUser: msgUser,
-              messageKind: MessageKind.image(url),
+              messageKind: MessageKind.imageProvider(
+                NetworkImage(url),
+              ),
             ),
           );
         }

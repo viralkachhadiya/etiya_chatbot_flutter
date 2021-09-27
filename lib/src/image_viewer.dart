@@ -4,11 +4,11 @@ import 'package:photo_view/photo_view.dart';
 class ImageViewer extends StatelessWidget {
   ImageViewer({
     Key? key,
-    required this.imageURL,
+    required this.imageProvider,
     this.closeAction,
   }) : super(key: key);
 
-  final String imageURL;
+  final ImageProvider imageProvider;
   VoidCallback? closeAction;
 
   @override
@@ -21,7 +21,7 @@ class ImageViewer extends StatelessWidget {
           children: <Widget>[
             Positioned.fill(
               child: PhotoView(
-                imageProvider: NetworkImage(imageURL),
+                imageProvider: imageProvider,
                 loadingBuilder: (_, __) => const Center(
                   child: SizedBox(
                     width: 20.0,

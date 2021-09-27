@@ -82,13 +82,12 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
   }
 
   void messagePressedAction(Message message, BuildContext context) {
-    final imageUrl = message.messageKind.imageURL;
-    if (imageUrl != null) {
-      Log.info(imageUrl);
+    final imageProvider = message.messageKind.imageProvider;
+    if (imageProvider != null) {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (_) => ImageViewer(
-            imageURL: imageUrl,
+            imageProvider: imageProvider,
             closeAction: () {
               Navigator.of(context).pop();
             },
