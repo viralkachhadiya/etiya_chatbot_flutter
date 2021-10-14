@@ -63,7 +63,7 @@ class ChatViewModel {
       const JsonEncoder encoder = JsonEncoder.withIndent('  ');
       // final String prettyPrint = encoder.convert(json["rawMessage"]);
       // logger.info(prettyPrint);
-      final messageResponse = MessageResponse.fromJson(json);
+      final messageResponse = MessageResponse.fromJson(json as Map<String, dynamic>);
       chatBotUser = messageResponse.user ?? EtiyaChatUser(firstName: 'Chatbot');
       messageResponse.user?.fullName = builder.userName;
       messageResponse.user?.avatar = builder.incomingAvatar;
@@ -88,7 +88,7 @@ class ChatViewModel {
         )
       ]);
     });
-    _socket.onError((error) => Log.error(error));
+    _socket.onError((error) => Log.error(error as String? ?? "socket gotError"));
     _socket.connect();
   }
 
@@ -136,41 +136,42 @@ extension LdapAuth on ChatViewModel {
   /// - Parameter username: User Name
   /// - Parameter password: User Password
   void auth(String username, String password) {
-    final urlString = builder.authUrl!;
-    // final urlString = "${builder.authUrl}/auth/ldaps";
-    final url = Uri.parse(urlString);
+    if (builder.authUrl == null) {
+      Log.error("Set auth url first!");
+    }
+    final url = Uri.parse(builder.authUrl!);
     http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
       body: json.encode({
-        "user": username,
-        // "username": username,
+        "username": username,
         "password": password,
         "chatId": "mobile:$userId"
       }),
     ).then((response) {
       if (response.statusCode >= 200 && response.statusCode <= 300) {
-        Log.info("Auth API call succeeded!");
         Log.info(response.body);
-        isAuthenticated?.call(response.body == "true");
+        final json = jsonDecode(response.body) as Map<String, dynamic>;
+        final isAuth = json["isAuth"] as bool? ?? false;
+        Log.info("isAuthenticated: $isAuth");
         onNewMessage?.call([
-          authStatusMessage(response.body == "true")
+          authStatusMessage(isAuth)
         ]);
-        // final Map<String, dynamic> json = jsonDecode(response.body);
-        // if (json.containsValue("isAuth")) {
-        //   final isAuth = json["isAuth"] as bool;
-        //   Log.info("isAuthenticated: $isAuth");
-        //   isAuthenticated?.call(isAuth);
-        //   return;
-        // }
+        isAuthenticated?.call(isAuth);
       } else {
+        onNewMessage?.call([
+          authStatusMessage(false)
+        ]);
         Log.error(
           "User's message could not sent, statusCode: ${response.statusCode}",
         );
       }
     }).onError((error, stackTrace) {
+      onNewMessage?.call([
+        authStatusMessage(false)
+      ]);
       Log.error(error.toString());
     });
   }

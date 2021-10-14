@@ -28,8 +28,8 @@ class MessageResponse {
 
   factory MessageResponse.fromJson(Map<String, dynamic> json) =>
       MessageResponse(
-        id: json["id"],
-        sessionId: json["sessionId"],
+        id: json["id"] as String?,
+        sessionId: json["sessionId"] as String?,
         // session: json["session"] == null ? null : Session.fromJson(json["session"]),
         type: json["type"],
         text: json["text"],
@@ -37,7 +37,7 @@ class MessageResponse {
             json["rawMessage"]),
         direction: json["direction"],
         ts: json["ts"] == null ? null : DateTime.parse(json["ts"]),
-        userId: json["userId"],
+        userId: json["userId"] as String?,
         user: json["user"] == null ? null : EtiyaChatUser.fromJson(json["user"]),
       );
 
@@ -82,11 +82,11 @@ class RawMessage {
 
   factory RawMessage.fromJson(Map<String, dynamic> json) =>
       RawMessage(
-        to: json["to"] == null ? null : json["to"],
+        to: json["to"] as String?,
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
-        type: json["type"] == null ? null : json["type"],
-        channel: json["channel"] == null ? null : json["channel"],
-        carrier: json["__carrier"] == null ? null : json["__carrier"],
+        type: json["type"] as String?,
+        channel: json["channel"] as String?,
+        carrier: json["__carrier"] as String?,
       );
 
   Map<String, dynamic> toJson() =>
@@ -112,7 +112,7 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) =>
       Data(
-        text: json["text"],
+        text: json["text"] as String?,
         extras: json["extras"] == null ? null : Extras.fromJson(json["extras"]),
         payload: json["payload"] == null ? null : Payload.fromJson(json["payload"])
       );
@@ -146,13 +146,13 @@ class Extras {
 
   factory Extras.fromJson(Map<String, dynamic> json) =>
       Extras(
-          language: json["language"],
-          sourceID: json["source_id"],
-          threadID: json["thread_id"],
-          categoryIDS: json["category_ids"],
-          inReplyToID: json["in_reply_to_id"],
-          firstInThread: json["first_in_thread"],
-          inReplyToAuthorID: json["in_reply_to_author_id"]
+          language: json["language"] as String?,
+          sourceID: json["source_id"] as String?,
+          threadID: json["thread_id"] as String?,
+          categoryIDS: json["category_ids"] as List<String>?,
+          inReplyToID: json["in_reply_to_id"] as String?,
+          firstInThread: json["first_in_thread"] as bool?,
+          inReplyToAuthorID: json["in_reply_to_author_id"] as String?
       );
 
   Map<String, dynamic> toJson() =>
@@ -178,10 +178,10 @@ class Element {
 
   factory Element.fromJson(Map<String, dynamic> json) =>
       Element(
-          title: json["title"],
+          title: json["title"] as String?,
           buttons: json["buttons"] == null ? null : List<CarouselButton>.from(json["buttons"].map((x) => CarouselButton.fromJson(x))),
-          picture: json["picture"],
-          subtitle: json["subtitle"]
+          picture: json["picture"] as String?,
+          subtitle: json["subtitle"] as String?,
       );
 
   Map<String, dynamic> toJson() =>
@@ -206,9 +206,9 @@ class CarouselButton {
   String? payload;
 
   factory CarouselButton.fromJson(Map<String, dynamic> json) => CarouselButton(
-    url: json["url"] == null ? null : json["url"],
-    title: json["title"] == null ? null : json["title"],
-    payload: json["payload"] == null ? null : json["payload"],
+    url: json["url"] as String?,
+    title: json["title"] as String?,
+    payload: json["payload"] as String?,
   );
 
   Map<String, dynamic> toJson() => {
@@ -228,8 +228,8 @@ class QuickReply {
 
   factory QuickReply.fromJson(Map<String, dynamic> json) =>
       QuickReply(
-          title: json["title"],
-          payload: json["payload"]
+          title: json["title"] as String?,
+          payload: json["payload"] as String?
       );
 
   Map<String, dynamic> toJson() =>
@@ -260,13 +260,13 @@ class Payload {
 
   factory Payload.fromJson(Map<String, dynamic> json) =>
       Payload(
-          typing: json["typing"],
-          markdown: json["markdown"],
-          conversationId: json["conversationId"],
+          typing: json["typing"] as int?,
+          markdown: json["markdown"] as bool?,
+          conversationId: json["conversationId"] as String?,
           quickReplies:  json["quick_replies"] == null ? null : List<QuickReply>.from(json["quick_replies"].map((x) => QuickReply.fromJson(x))),
           elements: json["elements"] == null ? null : List<Element>.from(json["elements"].map((x) => Element.fromJson(x))),
-          mime: json["mime"],
-          url: json["url"]
+          mime: json["mime"] as String?,
+          url: json["url"] as String?
       );
 
   Map<String, dynamic> toJson() =>
@@ -322,20 +322,20 @@ class EtiyaChatUser extends ChatUser {
 
   factory EtiyaChatUser.fromJson(Map<String, dynamic> json) =>
       EtiyaChatUser(
-        fullName: json["fullName"],
-        isOnline: json["isOnline"],
-        id: json["id"],
-        userId: json["userId"],
-        platform: json["platform"],
-        gender: json["gender"],
-        pictureUrl: json["pictureUrl"],
-        firstName: json["firstName"],
-        lastName: json["lastName"],
-        locale: json["locale"],
-        createdOn: json["createdOn"] == null ? null : DateTime.parse(
-            json["createdOn"]),
-        userType: json["userType"],
-        platformId: json["platformId"],
+        fullName: json["fullName"] as String?,
+        isOnline: json["isOnline"] as bool?,
+        id: json["id"] as String?,
+        userId: json["userId"] as String?,
+        platform: json["platform"] as String?,
+        gender: json["gender"] as String?,
+        pictureUrl: json["pictureUrl"] as String?,
+        firstName: json["firstName"] as String?,
+        lastName: json["lastName"] as String?,
+        locale: json["locale"] as String?,
+        createdOn: (json["createdOn"] as String?) == null ? null : DateTime.parse(
+            json["createdOn"] as String),
+        userType: json["userType"] as String?,
+        platformId: json["platformId"] as String?,
       );
 
   Map<String, dynamic> toJson() =>

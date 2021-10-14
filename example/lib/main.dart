@@ -32,9 +32,6 @@ class MyHomePage extends StatefulWidget {
       .setSocketUrl("https://chatbotbo-demo8.serdoo.com/nlp")
       .setServiceUrl("https://chatbotbo-demo8.serdoo.com/api/chat")
       .setAuthUrl("https://chatbotosb-demo8.serdoo.com/api/auth")
-      // .setSocketUrl("https://chatbotbo-demo8.serdoo.com/chat")
-      // .setServiceUrl("https://chatbotbo-demo8.serdoo.com/api/chat")
-      // .setAuthUrl("https://chatbotbo-demo8.serdoo.com/api/chat")
       .build();
 
   @override
