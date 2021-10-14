@@ -337,7 +337,7 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.0"
+    version: "6.0.1"
   quiver:
     dependency: transitive
     description:
@@ -351,7 +351,7 @@ packages:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.7"
+    version: "2.0.8"
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -447,13 +447,13 @@ packages:
       path: "../../swifty_chat"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "1.0.4"
   swifty_chat_data:
     dependency: transitive
     description:
-      path: "../../swifty_chat/packages/swifty_chat_data"
-      relative: true
-    source: path
+      name: swifty_chat_data
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.1"
   term_glyph:
     dependency: transitive

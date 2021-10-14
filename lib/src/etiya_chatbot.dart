@@ -24,6 +24,7 @@ class EtiyaChatbotBuilder {
   String? authUrl;
   UserAvatar? outgoingAvatar;
   UserAvatar? incomingAvatar;
+  ChatTheme chatTheme = const DefaultChatTheme();
 
   EtiyaChatbotBuilder() {
     setDeviceID();
@@ -74,6 +75,12 @@ class EtiyaChatbotBuilder {
   /// Avatar configuration for outgoing messages.
   EtiyaChatbotBuilder setOutgoingAvatar(UserAvatar avatar) {
     outgoingAvatar = avatar;
+    return this;
+  }
+
+  /// Chat theme for styling the Chat widget and inner elements.
+  EtiyaChatbotBuilder setChatTheme(ChatTheme theme) {
+    chatTheme = theme;
     return this;
   }
 

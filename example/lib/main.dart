@@ -19,7 +19,7 @@ class MyHomePage extends StatefulWidget {
   final EtiyaChatbot _etiyaChatbot = EtiyaChatbotBuilder()
       // .setWelcomeMessage("Merhaba, size nasıl yardımcı olabilirim")
       .setUserName("enesKaraosman")
-      .setLoggingEnabled(false)
+      .setLoggingEnabled(true)
       .setIncomingAvatar(
         UserAvatar(
           size: 36,
@@ -28,9 +28,13 @@ class MyHomePage extends StatefulWidget {
           ),
         ),
       )
-      // .setStyle(style)
-      .setSocketUrl("https://chatbotbo-demo8.serdoo.com/chat")
+      .setChatTheme(const DefaultChatTheme())
+      .setSocketUrl("https://chatbotbo-demo8.serdoo.com/nlp")
       .setServiceUrl("https://chatbotbo-demo8.serdoo.com/api/chat")
+      .setAuthUrl("https://chatbotosb-demo8.serdoo.com/api/auth")
+      // .setSocketUrl("https://chatbotbo-demo8.serdoo.com/chat")
+      // .setServiceUrl("https://chatbotbo-demo8.serdoo.com/api/chat")
+      // .setAuthUrl("https://chatbotbo-demo8.serdoo.com/api/chat")
       .build();
 
   @override

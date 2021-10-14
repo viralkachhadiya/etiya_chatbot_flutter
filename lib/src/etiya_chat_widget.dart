@@ -1,4 +1,6 @@
 import 'package:etiya_chatbot_flutter/src/image_viewer.dart';
+import 'package:etiya_chatbot_flutter/src/login_sheet.dart';
+import 'package:etiya_chatbot_flutter/src/models/etiya_login_message_kind.dart';
 import 'package:flutter/material.dart';
 import 'package:swifty_chat/swifty_chat.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,6 +33,9 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
       });
       _chatView.scrollToBottom();
     };
+    widget.viewModel.isAuthenticated = (isAuthenticated) {
+      Log.info("Auth status: $isAuthenticated");
+    };
     super.initState();
   }
 
@@ -44,7 +49,8 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
   Widget build(BuildContext context) {
     _chatView = Chat(
       messages: _messages,
-      theme: DefaultChatTheme(),
+      customMessageWidget: (message) => loginButton(context, message),
+      theme: widget.viewModel.chatTheme,
       messageCellSizeConfigurator:
           MessageCellSizeConfigurator.defaultConfiguration,
       chatMessageInputField: MessageInputField(
@@ -56,7 +62,9 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
         .setOnQuickReplyItemPressed(quickReplyPressedAction);
     return _chatView;
   }
+}
 
+extension ChatInteractions on _EtiyaChatWidgetState {
   void sendButtonPressedAction(String text) {
     widget.viewModel.sendMessage(
       MessageRequest(
@@ -65,18 +73,16 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
         type: "text",
       ),
     );
-    setState(
-      () {
-        _messages.insert(
-          0,
-          EtiyaChatMessage(
-              isMe: true,
-              id: DateTime.now().toString(),
-              messageKind: MessageKind.text(text),
-              chatUser: widget.viewModel.customerUser),
-        );
-      },
-    );
+    setState(() {
+      _messages.insert(
+        0,
+        EtiyaChatMessage(
+            isMe: true,
+            id: DateTime.now().toString(),
+            messageKind: MessageKind.text(text),
+            chatUser: widget.viewModel.customerUser),
+      );
+    });
     Log.info(text);
     _chatView.scrollToBottom();
   }
@@ -154,5 +160,37 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
     });
     Log.info(item.payload);
     _chatView.scrollToBottom();
+  }
+}
+
+extension CustomMessageWidget on _EtiyaChatWidgetState {
+  Widget customWidget(BuildContext context, Message message) {
+    if (message.messageKind.custom is EtiyaLoginMessageKind) {
+      return loginButton(context, message);
+    }
+    return Container();
+  }
+
+  Widget loginButton(BuildContext context, Message message) {
+    return LoginButton(
+      buttonText: (message.messageKind.custom as EtiyaLoginMessageKind).title,
+      onPressed: () async {
+        final formData = await showModalBottomSheet(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height * 0.7,
+            maxHeight: MediaQuery.of(context).size.height * 0.75
+          ),
+          isScrollControlled: true,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          context: context,
+          builder: (_) => const LoginSheet(),
+        );
+        debugPrint("FormData $formData");
+        if (formData == null) { return; }
+        final String email = formData["email"] as String;
+        final String password = formData["password"] as String;
+        widget.viewModel.auth(email, password);
+      },
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
+import 'package:etiya_chatbot_flutter/src/models/etiya_login_message_kind.dart';
 import 'package:flutter/material.dart';
 import 'package:swifty_chat/swifty_chat.dart';
 
@@ -32,6 +33,18 @@ extension MessageMapper on MessageResponse {
     final msgId = id ?? DateTime.now().toString();
     final EtiyaChatUser msgUser = user ?? EtiyaChatUser();
     switch (type) {
+      case 'login':
+        messages.add(
+          EtiyaChatMessage(
+            id: msgId,
+            isMe: false,
+            chatUser: msgUser,
+            messageKind: MessageKind.custom(
+              EtiyaLoginMessageKind(title: text ?? 'Login'),
+            ),
+          ),
+        );
+        break;
       case 'text':
         if (hasQuickReply) {
           final quickReplies = rawMessage?.data?.payload?.quickReplies ?? [];

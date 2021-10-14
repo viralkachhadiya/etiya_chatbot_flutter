@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -8,23 +9,28 @@ import '../src/etiya_chatbot.dart';
 import '../src/models/api/etiya_message_request.dart';
 import '../src/models/api/etiya_message_response.dart';
 import '../src/models/etiya_chat_message.dart';
+import '../src/models/etiya_login_message_kind.dart';
 import '../src/util/constants.dart';
 import '../src/util/logger.dart';
 
-enum ChatEvents {
-  newMessage
-}
+enum ChatEvents { newMessage }
 
 class ChatViewModel {
   final EtiyaChatbotBuilder builder;
   String _deviceId = '';
   late IO.Socket _socket;
 
+  /// Current LDAP Auth status.
+  void Function(bool)? isAuthenticated;
+
+  /// A callback thats triggered when the new message is received.
   void Function(List<EtiyaChatMessage>)? onNewMessage;
 
   ChatViewModel({required this.builder}) {
     _initializeSocket();
   }
+
+  ChatTheme get chatTheme => builder.chatTheme;
 
   void dispose() {
     _socket.clearListeners();
@@ -42,21 +48,23 @@ class ChatViewModel {
     Log.info("DeviceID fetched: $_deviceId");
     Log.info('Socket initializing...');
 
-    _socket = IO.io(builder.socketUrl,
-        IO.OptionBuilder()
-            .enableForceNew()
-            .setQuery({'visitorId': userId})
-            .setTransports(['websocket']) // for Flutter or Dart VM
-            .setPath('/ws')
-            .build()
+    _socket = IO.io(
+      builder.socketUrl,
+      IO.OptionBuilder()
+          .enableForceNew()
+          .setQuery({'visitorId': userId})
+          .setTransports(['websocket']) // for Flutter or Dart VM
+          .setPath('/ws')
+          .build(),
     );
     _socket.nsp = '/chat';
     _socket.on('newMessage', (json) {
       Log.info('newMessage event received');
       const JsonEncoder encoder = JsonEncoder.withIndent('  ');
-      final String prettyPrint = encoder.convert(json["rawMessage"]);
+      // final String prettyPrint = encoder.convert(json["rawMessage"]);
       // logger.info(prettyPrint);
       final messageResponse = MessageResponse.fromJson(json);
+      chatBotUser = messageResponse.user ?? EtiyaChatUser(firstName: 'Chatbot');
       messageResponse.user?.fullName = builder.userName;
       messageResponse.user?.avatar = builder.incomingAvatar;
       onNewMessage?.call(messageResponse.mapToChatMessage());
@@ -64,11 +72,21 @@ class ChatViewModel {
     _socket.onConnect((_) {
       Log.info('Socket connection is successful');
       sendMessage(
-          MessageRequest(
-              text: "/user_visit",
-              user: MessageUser(senderId: userId)
-          )
+        MessageRequest(
+          text: "/user_visit",
+          user: MessageUser(senderId: userId),
+        ),
       );
+      onNewMessage?.call([
+        EtiyaChatMessage(
+          chatUser: customerUser,
+          id: DateTime.now().toString(),
+          isMe: false,
+          messageKind: MessageKind.custom(
+            EtiyaLoginMessageKind(title: 'Login'),
+          ),
+        )
+      ]);
     });
     _socket.onError((error) => Log.error(error));
     _socket.connect();
@@ -84,10 +102,12 @@ class ChatViewModel {
       },
       body: jsonEncode(request.toJson()),
     ).then((response) {
-      if (response.statusCode > 200 && response.statusCode < 300) {
+      if (response.statusCode >= 200 && response.statusCode <= 300) {
         Log.info("User's message sent successfully");
       } else {
-        Log.error("User's message could not sent, statusCode: ${response.statusCode}");
+        Log.error(
+          "User's message could not sent, statusCode: ${response.statusCode}",
+        );
       }
     }).onError((error, stackTrace) {
       Log.error(error.toString());
@@ -109,4 +129,56 @@ class ChatViewModel {
     user.avatar = builder.outgoingAvatar;
     return user;
   }
+}
+
+extension LdapAuth on ChatViewModel {
+  /// LDAP Auth
+  /// - Parameter username: User Name
+  /// - Parameter password: User Password
+  void auth(String username, String password) {
+    final urlString = builder.authUrl!;
+    // final urlString = "${builder.authUrl}/auth/ldaps";
+    final url = Uri.parse(urlString);
+    http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        "user": username,
+        // "username": username,
+        "password": password,
+        "chatId": "mobile:$userId"
+      }),
+    ).then((response) {
+      if (response.statusCode >= 200 && response.statusCode <= 300) {
+        Log.info("Auth API call succeeded!");
+        Log.info(response.body);
+        isAuthenticated?.call(response.body == "true");
+        onNewMessage?.call([
+          authStatusMessage(response.body == "true")
+        ]);
+        // final Map<String, dynamic> json = jsonDecode(response.body);
+        // if (json.containsValue("isAuth")) {
+        //   final isAuth = json["isAuth"] as bool;
+        //   Log.info("isAuthenticated: $isAuth");
+        //   isAuthenticated?.call(isAuth);
+        //   return;
+        // }
+      } else {
+        Log.error(
+          "User's message could not sent, statusCode: ${response.statusCode}",
+        );
+      }
+    }).onError((error, stackTrace) {
+      Log.error(error.toString());
+    });
+  }
+
+  EtiyaChatMessage authStatusMessage(bool status) => EtiyaChatMessage(
+    chatUser: chatBotUser,
+    id: DateTime.now().toString(),
+    isMe: false,
+    messageKind: MessageKind.text("Giriş ${status ? "Başarılı" : "Başarısız"}"),
+  );
 }

@@ -1,1 +1,5 @@
 include: package:lint/analysis_options.yaml
+
+linter:
+  rules:
+    join_return_with_assignment: false
