@@ -27,7 +27,7 @@ dependencies:
   socket_io_client: ^2.0.0-beta.4-nullsafety.0
 
   # https://pub.dev/packages/swifty_chat
-  swifty_chat: ^1.0.4
+  swifty_chat: ^1.1.0
 
   # https://pub.dev/packages/url_launcher
   url_launcher: ^6.0.12

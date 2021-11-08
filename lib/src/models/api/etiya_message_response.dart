@@ -133,7 +133,7 @@ class Extras {
     this.categoryIDS,
     this.inReplyToID,
     this.firstInThread,
-    this.inReplyToAuthorID
+    this.inReplyToAuthorID,
   });
 
   String? language;

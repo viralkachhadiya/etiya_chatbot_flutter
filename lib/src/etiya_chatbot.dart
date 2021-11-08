@@ -11,7 +11,9 @@ import 'etiya_chat_widget.dart';
 class EtiyaChatbot {
   final EtiyaChatbotBuilder builder;
 
-  EtiyaChatbot({required this.builder});
+  EtiyaChatbot({
+    required this.builder,
+  });
 
   Widget getChatWidget(ChatViewModel viewModel) =>
       EtiyaChatWidget(viewModel: viewModel);
@@ -27,11 +29,11 @@ class EtiyaChatbotBuilder {
   ChatTheme chatTheme = const DefaultChatTheme();
 
   EtiyaChatbotBuilder() {
-    setDeviceID();
+    _setDeviceID();
     setLoggingEnabled();
   }
 
-  Future<void> setDeviceID() async {
+  Future<void> _setDeviceID() async {
     const preferenceKey = Constants.deviceIDKey;
     final sp = await SharedPreferences.getInstance();
     final deviceID = sp.getString(preferenceKey);
@@ -40,6 +42,19 @@ class EtiyaChatbotBuilder {
       sp.setString(preferenceKey, uuid);
       Log.info("deviceID: $uuid is saved to DB");
     }
+  }
+
+  Future<String> _getDeviceID() async {
+    await _setDeviceID();
+    final sp = await SharedPreferences.getInstance();
+    return Future(() => sp.getString(Constants.deviceIDKey) ?? 'unset id');
+  }
+
+  Future<String> getUserID() async {
+    final uid = userName ?? 'chatbot_client';
+    final deviceId = await _getDeviceID();
+    Log.info('userId: $uid$deviceId that is used to communicate with socket');
+    return '$uid$deviceId';
   }
 
   /// Behaves like unique id to distinguish chats for backend.

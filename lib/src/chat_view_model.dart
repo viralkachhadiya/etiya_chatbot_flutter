@@ -17,7 +17,6 @@ enum ChatEvents { newMessage }
 
 class ChatViewModel {
   final EtiyaChatbotBuilder builder;
-  String _deviceId = '';
   late IO.Socket _socket;
 
   /// Current LDAP Auth status.
@@ -26,8 +25,13 @@ class ChatViewModel {
   /// A callback thats triggered when the new message is received.
   void Function(List<EtiyaChatMessage>)? onNewMessage;
 
+  late String userId;
+
   ChatViewModel({required this.builder}) {
-    _initializeSocket();
+    builder.getUserID().then((value) {
+      userId = value;
+      _initializeSocket(value);
+    });
   }
 
   ChatTheme get chatTheme => builder.chatTheme;
@@ -37,17 +41,8 @@ class ChatViewModel {
     _socket.close();
   }
 
-  Future<String> _getDeviceID() async {
-    final sp = await SharedPreferences.getInstance();
-    return Future(() => sp.getString(Constants.deviceIDKey) ?? 'unset id');
-  }
-
-  void _initializeSocket() async {
-    _deviceId = await _getDeviceID();
-
-    Log.info("DeviceID fetched: $_deviceId");
+  void _initializeSocket(String userId) {
     Log.info('Socket initializing...');
-
     _socket = IO.io(
       builder.socketUrl,
       IO.OptionBuilder()
@@ -60,10 +55,11 @@ class ChatViewModel {
     _socket.nsp = '/chat';
     _socket.on('newMessage', (json) {
       Log.info('newMessage event received');
-      const JsonEncoder encoder = JsonEncoder.withIndent('  ');
+      // const JsonEncoder encoder = JsonEncoder.withIndent('  ');
       // final String prettyPrint = encoder.convert(json["rawMessage"]);
       // logger.info(prettyPrint);
-      final messageResponse = MessageResponse.fromJson(json as Map<String, dynamic>);
+      final messageResponse =
+          MessageResponse.fromJson(json as Map<String, dynamic>);
       chatBotUser = messageResponse.user ?? EtiyaChatUser(firstName: 'Chatbot');
       messageResponse.user?.fullName = builder.userName;
       messageResponse.user?.avatar = builder.incomingAvatar;
@@ -114,12 +110,6 @@ class ChatViewModel {
     });
   }
 
-  String get userId {
-    final uid = builder.userName ?? 'chatbot_client';
-    Log.info('userId: $uid$_deviceId that is used to communicate with socket');
-    return '$uid$_deviceId';
-  }
-
   /// Chatbot User
   late EtiyaChatUser chatBotUser;
 
@@ -135,7 +125,7 @@ extension LdapAuth on ChatViewModel {
   /// LDAP Auth
   /// - Parameter username: User Name
   /// - Parameter password: User Password
-  void auth(String username, String password) {
+  Future<void> auth(String username, String password) async {
     if (builder.authUrl == null) {
       Log.error("Set auth url first!");
     }
@@ -156,30 +146,25 @@ extension LdapAuth on ChatViewModel {
         final json = jsonDecode(response.body) as Map<String, dynamic>;
         final isAuth = json["isAuth"] as bool? ?? false;
         Log.info("isAuthenticated: $isAuth");
-        onNewMessage?.call([
-          authStatusMessage(isAuth)
-        ]);
+        onNewMessage?.call([authStatusMessage(isAuth)]);
         isAuthenticated?.call(isAuth);
       } else {
-        onNewMessage?.call([
-          authStatusMessage(false)
-        ]);
+        onNewMessage?.call([authStatusMessage(false)]);
         Log.error(
           "User's message could not sent, statusCode: ${response.statusCode}",
         );
       }
     }).onError((error, stackTrace) {
-      onNewMessage?.call([
-        authStatusMessage(false)
-      ]);
+      onNewMessage?.call([authStatusMessage(false)]);
       Log.error(error.toString());
     });
   }
 
   EtiyaChatMessage authStatusMessage(bool status) => EtiyaChatMessage(
-    chatUser: chatBotUser,
-    id: DateTime.now().toString(),
-    isMe: false,
-    messageKind: MessageKind.text("Giriş ${status ? "Başarılı" : "Başarısız"}"),
-  );
+        chatUser: chatBotUser,
+        id: DateTime.now().toString(),
+        isMe: false,
+        messageKind:
+            MessageKind.text("Giriş ${status ? "Başarılı" : "Başarısız"}"),
+      );
 }
