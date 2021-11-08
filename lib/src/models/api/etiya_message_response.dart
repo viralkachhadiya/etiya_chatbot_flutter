@@ -31,12 +31,12 @@ class MessageResponse {
         id: json["id"] as String?,
         sessionId: json["sessionId"] as String?,
         // session: json["session"] == null ? null : Session.fromJson(json["session"]),
-        type: json["type"],
-        text: json["text"],
+        type: json["type"] as String?,
+        text: json["text"] as String?,
         rawMessage: json["rawMessage"] == null ? null : RawMessage.fromJson(
-            json["rawMessage"]),
-        direction: json["direction"],
-        ts: json["ts"] == null ? null : DateTime.parse(json["ts"]),
+            json["rawMessage"] as Map<String, dynamic>),
+        direction: json["direction"] as String?,
+        ts: json["ts"] == null ? null : DateTime.parse(json["ts"] as String),
         userId: json["userId"] as String?,
         user: json["user"] == null ? null : EtiyaChatUser.fromJson(json["user"]),
       );
@@ -113,8 +113,8 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json) =>
       Data(
         text: json["text"] as String?,
-        extras: json["extras"] == null ? null : Extras.fromJson(json["extras"]),
-        payload: json["payload"] == null ? null : Payload.fromJson(json["payload"])
+        extras: json["extras"] == null ? null : Extras.fromJson(json["extras"] as Map<String, dynamic>),
+        payload: json["payload"] == null ? null : Payload.fromJson(json["payload"] as Map<String, dynamic>)
       );
 
   Map<String, dynamic> toJson() =>
