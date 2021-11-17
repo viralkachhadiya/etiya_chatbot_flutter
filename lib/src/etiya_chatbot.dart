@@ -11,7 +11,7 @@ import 'etiya_chat_widget.dart';
 class EtiyaChatbot {
   final EtiyaChatbotBuilder builder;
 
-  EtiyaChatbot({
+  const EtiyaChatbot({
     required this.builder,
   });
 
@@ -24,6 +24,7 @@ class EtiyaChatbotBuilder {
   String? serviceUrl;
   String? socketUrl;
   String? authUrl;
+  String? messageInputHintText;
   UserAvatar? outgoingAvatar;
   UserAvatar? incomingAvatar;
   ChatTheme chatTheme = const DefaultChatTheme();
@@ -78,6 +79,12 @@ class EtiyaChatbotBuilder {
   /// The connection URL for ldap authorization.
   EtiyaChatbotBuilder setAuthUrl(String url) {
     authUrl = url;
+    return this;
+  }
+
+  /// The hint text displayed on message input field.
+  EtiyaChatbotBuilder setMessageInputHintText(String text) {
+    messageInputHintText = text;
     return this;
   }
 

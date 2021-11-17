@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../etiya_chatbot_flutter.dart';
 import 'chat_view_model.dart';
+import 'etiya_message_input.dart';
 import 'models/api/etiya_message_request.dart';
 import 'models/api/etiya_message_response.dart';
 import 'models/etiya_chat_message.dart';
@@ -53,8 +54,9 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
       theme: widget.viewModel.chatTheme,
       messageCellSizeConfigurator:
           MessageCellSizeConfigurator.defaultConfiguration,
-      chatMessageInputField: MessageInputField(
+      chatMessageInputField: EtiyaMessageInput(
         sendButtonTapped: sendButtonPressedAction,
+        hintText: widget.viewModel.builder.messageInputHintText ?? "Aa",
       ),
     )
         .setOnMessagePressed((msg) => messagePressedAction(msg, context))
