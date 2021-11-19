@@ -13,8 +13,9 @@ class EtiyaCarouselItem extends CarouselItem {
     this.imageProvider,
     this.buttons = const [],
   }) : super(
-            title: title,
-            subtitle: subtitle,
-            imageProvider: imageProvider,
-            buttons: buttons);
+          title: title,
+          subtitle: subtitle,
+          imageProvider: imageProvider,
+          buttons: buttons,
+        );
 }

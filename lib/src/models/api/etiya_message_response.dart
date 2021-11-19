@@ -185,9 +185,9 @@ class Element {
         buttons: json["buttons"] == null
             ? null
             : List<CarouselButton>.from(
-                json["buttons"].map((x) =>
-                        CarouselButton.fromJson(x as Map<String, dynamic>))
-                    as Iterable,
+                json["buttons"].map(
+                  (x) => CarouselButton.fromJson(x as Map<String, dynamic>),
+                ) as Iterable,
               ),
         picture: json["picture"] as String?,
         subtitle: json["subtitle"] as String?,
@@ -231,20 +231,23 @@ class QuickReply {
   String? payload;
 
   factory QuickReply.fromJson(Map<String, dynamic> json) => QuickReply(
-      title: json["title"] as String?, payload: json["payload"] as String?);
+        title: json["title"] as String?,
+        payload: json["payload"] as String?,
+      );
 
   Map<String, dynamic> toJson() => {"title": title, "payload": payload};
 }
 
 class Payload {
-  Payload(
-      {this.typing,
-      this.markdown,
-      this.conversationId,
-      this.quickReplies,
-      this.elements,
-      this.mime,
-      this.url});
+  Payload({
+    this.typing,
+    this.markdown,
+    this.conversationId,
+    this.quickReplies,
+    this.elements,
+    this.mime,
+    this.url,
+  });
 
   int? typing;
   bool? markdown;
@@ -255,25 +258,26 @@ class Payload {
   String? url;
 
   factory Payload.fromJson(Map<String, dynamic> json) => Payload(
-      typing: json["typing"] as int?,
-      markdown: json["markdown"] as bool?,
-      conversationId: json["conversationId"] as String?,
-      quickReplies: json["quick_replies"] == null
-          ? null
-          : List<QuickReply>.from(
-              json["quick_replies"].map(
-                (x) => QuickReply.fromJson(x as Map<String, dynamic>),
-              ) as Iterable,
-            ),
-      elements: json["elements"] == null
-          ? null
-          : List<Element>.from(
-              json["elements"].map(
-                (x) => Element.fromJson(x as Map<String, dynamic>),
-              ) as Iterable,
-            ),
-      mime: json["mime"] as String?,
-      url: json["url"] as String?);
+        typing: json["typing"] as int?,
+        markdown: json["markdown"] as bool?,
+        conversationId: json["conversationId"] as String?,
+        quickReplies: json["quick_replies"] == null
+            ? null
+            : List<QuickReply>.from(
+                json["quick_replies"].map(
+                  (x) => QuickReply.fromJson(x as Map<String, dynamic>),
+                ) as Iterable,
+              ),
+        elements: json["elements"] == null
+            ? null
+            : List<Element>.from(
+                json["elements"].map(
+                  (x) => Element.fromJson(x as Map<String, dynamic>),
+                ) as Iterable,
+              ),
+        mime: json["mime"] as String?,
+        url: json["url"] as String?,
+      );
 
   Map<String, dynamic> toJson() => {
         "typing": typing,

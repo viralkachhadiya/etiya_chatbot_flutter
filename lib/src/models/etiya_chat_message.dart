@@ -57,9 +57,9 @@ extension MessageMapper on MessageResponse {
               )
               .toList();
           if (text != null) {
-            MessageKind kind = MessageKind.text(text!);
+            MessageKind kind = MessageKind.text(text);
             if (text!.containsHTML) {
-              kind = MessageKind.html(text!);
+              kind = MessageKind.html(text);
             }
             messages.add(
               EtiyaChatMessage(
@@ -80,9 +80,9 @@ extension MessageMapper on MessageResponse {
           );
         } else {
           if (text != null) {
-            MessageKind kind = MessageKind.text(text!);
+            MessageKind kind = MessageKind.text(text);
             if (text!.containsHTML) {
-              kind = MessageKind.html(text!);
+              kind = MessageKind.html(text);
             }
             messages.add(
               EtiyaChatMessage(
@@ -135,7 +135,7 @@ extension MessageMapper on MessageResponse {
 
       case 'file':
         if (hasImage) {
-          String? url = rawMessage?.data?.payload?.url;
+          final String? url = rawMessage?.data?.payload?.url;
           if (url == null) break;
           messages.add(
             EtiyaChatMessage(

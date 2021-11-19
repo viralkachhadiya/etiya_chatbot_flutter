@@ -1,4 +1,4 @@
-import 'package:etiya_chatbot_flutter/src/models/api/etiya_message_response.dart';
+import '../models/api/etiya_message_response.dart';
 
 abstract class SocketRepository {
   final String userName;

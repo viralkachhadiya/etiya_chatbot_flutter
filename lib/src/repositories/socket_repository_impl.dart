@@ -1,3 +1,4 @@
+// ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../models/api/etiya_message_response.dart';

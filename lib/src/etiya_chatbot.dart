@@ -5,9 +5,9 @@ import 'package:swifty_chat/swifty_chat.dart';
 import '../src/util/logger.dart';
 import 'cubit/chatbot_cubit.dart';
 import 'di/setup_locator.dart';
-import 'ui/etiya_chat_widget.dart';
-import 'http/http_client_repository.dart';
+import 'repositories/http/http_client_repository.dart';
 import 'repositories/socket_repository.dart';
+import 'ui/etiya_chat_widget.dart';
 
 class EtiyaChatbot {
   final EtiyaChatbotBuilder builder;
@@ -17,16 +17,16 @@ class EtiyaChatbot {
   });
 
   Future<Widget> getChatWidget() async => MultiRepositoryProvider(
-        providers: await DependencyInjection.build(builder),
-        child: BlocProvider(
-          create: (context) => ChatbotCubit(
-            chatbotBuilder: builder,
-            socketRepository: context.read<SocketRepository>(),
-            httpClientRepository: context.read<HttpClientRepository>(),
-          ),
-          child: const EtiyaChatWidget(),
+      providers: await DependencyInjection.build(builder),
+      child: BlocProvider(
+        create: (context) => ChatbotCubit(
+          chatbotBuilder: builder,
+          socketRepository: context.read<SocketRepository>(),
+          httpClientRepository: context.read<HttpClientRepository>(),
         ),
-      );
+        child: const EtiyaChatWidget(),
+      ),
+  );
 }
 
 class EtiyaChatbotBuilder {
@@ -84,6 +84,7 @@ class EtiyaChatbotBuilder {
   }
 
   /// Configuration for logging internal events, disabled by default.
+  // ignore: avoid_positional_boolean_parameters
   EtiyaChatbotBuilder setLoggingEnabled([bool enabled = false]) {
     Log.isEnabled = enabled;
     return this;

@@ -2,10 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:swifty_chat/swifty_chat.dart';
 
 import '../etiya_chatbot.dart';
-import '../http/http_client_repository.dart';
 import '../models/api/etiya_message_request.dart';
 import '../models/api/etiya_message_response.dart';
 import '../models/etiya_chat_message.dart';
+import '../repositories/http/http_client_repository.dart';
 import '../repositories/socket_repository.dart';
 import '../util/logger.dart';
 
@@ -21,9 +21,6 @@ class ChatbotCubit extends Cubit<ChatbotState> {
   String get messageInputHintText =>
       chatbotBuilder.messageInputHintText ?? "Aa";
 
-  /// Chatbot User
-  late EtiyaChatUser _chatBotUser;
-
   /// Customer User
   EtiyaChatUser get _customerUser {
     final user = EtiyaChatUser(fullName: chatbotBuilder.userName);
@@ -38,8 +35,6 @@ class ChatbotCubit extends Cubit<ChatbotState> {
   }) : super(MessagesUpdated()) {
     socketRepository.onNewMessageReceived = (messageResponse) {
       Log.info('socketRepository.onNewMessageReceived');
-      _chatBotUser =
-          messageResponse.user ?? EtiyaChatUser(firstName: 'Chatbot');
       messageResponse.user?.fullName = chatbotBuilder.userName;
       messageResponse.user?.avatar = chatbotBuilder.incomingAvatar;
       _insertNewMessages(messageResponse.mapToChatMessage());

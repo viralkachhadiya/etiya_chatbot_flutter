@@ -2,8 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../etiya_chatbot.dart';
-import '../http/http_client_repository.dart';
 import '../repositories/device_id_repository.dart';
+import '../repositories/http/http_client_repository.dart';
 import '../repositories/socket_repository.dart';
 import '../repositories/socket_repository_impl.dart';
 
