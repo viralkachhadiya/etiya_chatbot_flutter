@@ -5,7 +5,7 @@ import 'package:swifty_chat/swifty_chat.dart';
 import '../src/util/logger.dart';
 import 'cubit/chatbot_cubit.dart';
 import 'di/setup_locator.dart';
-import 'etiya_chat_widget.dart';
+import 'ui/etiya_chat_widget.dart';
 import 'http/http_client_repository.dart';
 import 'repositories/socket_repository.dart';
 

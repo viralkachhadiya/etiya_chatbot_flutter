@@ -1,10 +1,11 @@
-import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
-import 'package:etiya_chatbot_flutter/src/http/http_client_repository.dart';
-import 'package:etiya_chatbot_flutter/src/repositories/device_id_repository.dart';
-import 'package:etiya_chatbot_flutter/src/repositories/socket_repository.dart';
-import 'package:etiya_chatbot_flutter/src/repositories/socket_repository_impl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../etiya_chatbot.dart';
+import '../http/http_client_repository.dart';
+import '../repositories/device_id_repository.dart';
+import '../repositories/socket_repository.dart';
+import '../repositories/socket_repository_impl.dart';
 
 class DependencyInjection {
   const DependencyInjection._();
@@ -19,7 +20,7 @@ class DependencyInjection {
     final socketRepository = SocketRepositoryImpl(
       userName: builder.userName,
       deviceId: deviceId,
-      socketUrl: 'https://chatbotbo-demo8.serdoo.com/nlp',
+      socketUrl: builder.socketUrl,
     );
 
     final httpClient = HttpClientRepositoryImpl(

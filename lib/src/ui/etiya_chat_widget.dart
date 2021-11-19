@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swifty_chat/swifty_chat.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'cubit/chatbot_cubit.dart';
+import '../cubit/chatbot_cubit.dart';
+import '../models/etiya_login_message_kind.dart';
+import '../util/logger.dart';
 import 'etiya_message_input.dart';
 import 'image_viewer.dart';
 import 'login_sheet.dart';
-import 'models/etiya_login_message_kind.dart';
-import 'util/logger.dart';
 
 class EtiyaChatWidget extends StatefulWidget {
   const EtiyaChatWidget();
