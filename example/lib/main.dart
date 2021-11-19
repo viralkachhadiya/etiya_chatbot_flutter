@@ -1,9 +1,7 @@
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
@@ -16,24 +14,101 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  final EtiyaChatbot _etiyaChatbot = EtiyaChatbotBuilder()
-      // .setWelcomeMessage("Merhaba, size nasıl yardımcı olabilirim")
-      .setUserName("enesKaraosman")
-      .setLoggingEnabled(true)
-      .setIncomingAvatar(
-        UserAvatar(
-          size: 36,
-          imageProvider: const NetworkImage(
-            'https://www.softronic.se/wp-content/uploads/2020/03/avatar_chatbot.png',
+class ToggChatbotTheme extends ChatTheme {
+  ToggChatbotTheme() : super();
+
+  Color toggPrimary = const Color(0xFF00C2E7);
+  Color toggSecondary = const Color(0xFFFF8933);
+
+  @override
+  Color get backgroundColor => neutral7;
+
+  @override
+  double get messageBorderRadius => 20;
+
+  @override
+  double get textMessagePadding => 12;
+
+  @override
+  Color get primaryColor => toggSecondary;
+
+  @override
+  TextStyle get incomingMessageBodyTextStyle => const TextStyle(
+      fontFamily: 'Fedra-Sans-Std', fontSize: 17, color: Colors.white);
+
+  @override
+  TextStyle get outgoingMessageBodyTextStyle => const TextStyle(
+      fontFamily: 'Fedra-Sans-Std', fontSize: 17, color: Colors.white);
+
+  @override
+  Color get secondaryColor => toggPrimary;
+
+  @override
+  EdgeInsets get messageInset => const EdgeInsets.symmetric(vertical: 8);
+
+  @override
+  TextStyle get carouselTitleTextStyle =>
+      const TextStyle(fontFamily: 'Fedra-Sans-Std', fontSize: 19);
+
+  @override
+  TextStyle get carouselSubtitleTextStyle =>
+      const TextStyle(fontFamily: 'Fedra-Sans-Std', fontSize: 17);
+
+  @override
+  ButtonStyle get carouselButtonStyle => ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(toggPrimary),
+      );
+
+  @override
+  ButtonStyle get quickReplyButtonStyle => ButtonStyle(
+        shape: MaterialStateProperty.all<OutlinedBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
-      )
-      .setChatTheme(const DefaultChatTheme())
-      .setSocketUrl("https://chatbotbo-demo8.serdoo.com/nlp")
-      .setServiceUrl("https://chatbotbo-demo8.serdoo.com/api/chat")
-      .setAuthUrl("https://chatbotosb-demo8.serdoo.com/api/auth")
-      .build();
+        foregroundColor: MaterialStateProperty.all<Color>(toggPrimary),
+        textStyle: MaterialStateProperty.all<TextStyle>(
+          TextStyle(
+            fontWeight: FontWeight.bold,
+            color: toggPrimary,
+          ),
+        ),
+      );
+
+  @override
+  Color get htmlTextColor => neutral0;
+
+  @override
+  String? get htmlTextFontFamily => 'Avenir';
+
+  @override
+  BoxDecoration get carouselBoxDecoration => BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: const Color(0xFFDFF2F6),
+      );
+
+  @override
+  BorderRadius get imageBorderRadius => BorderRadius.zero;
+}
+
+class MyHomePage extends StatefulWidget {
+  final EtiyaChatbot _etiyaChatbot = EtiyaChatbotBuilder(
+    serviceUrl: 'https://chatbotbo-demo8.serdoo.com/api/chat',
+    socketUrl: 'https://chatbotbo-demo8.serdoo.com/nlp'
+  )
+  .setUserName("enesKaraosman")
+  .setLoggingEnabled(true)
+  .setIncomingAvatar(
+    UserAvatar(
+      size: 36,
+      imageProvider: const NetworkImage(
+        'https://www.softronic.se/wp-content/uploads/2020/03/avatar_chatbot.png',
+      ),
+    ),
+  )
+  .setChatTheme(ToggChatbotTheme())
+  .setAuthUrl("https://chatbotosb-demo8.serdoo.com/api/auth")
+  .build();
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -43,8 +118,17 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget._etiyaChatbot.getChatWidget(
-        ChatViewModel(builder: widget._etiyaChatbot.builder),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF00C2E7),
+      ),
+      body: FutureBuilder(
+        future: widget._etiyaChatbot.getChatWidget(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return snapshot.data! as Widget;
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }

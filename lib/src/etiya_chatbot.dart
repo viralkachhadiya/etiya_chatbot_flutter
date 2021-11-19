@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swifty_chat/swifty_chat.dart';
-import 'package:uuid/uuid.dart';
 
-import '../src/util/constants.dart';
 import '../src/util/logger.dart';
-import 'chat_view_model.dart';
+import 'cubit/chatbot_cubit.dart';
+import 'di/setup_locator.dart';
 import 'etiya_chat_widget.dart';
+import 'http/http_client_repository.dart';
+import 'repositories/socket_repository.dart';
 
 class EtiyaChatbot {
   final EtiyaChatbotBuilder builder;
@@ -15,64 +16,43 @@ class EtiyaChatbot {
     required this.builder,
   });
 
-  Widget getChatWidget(ChatViewModel viewModel) =>
-      EtiyaChatWidget(viewModel: viewModel);
+  Future<Widget> getChatWidget() async => MultiRepositoryProvider(
+        providers: await DependencyInjection.build(builder),
+        child: BlocProvider(
+          create: (context) => ChatbotCubit(
+            chatbotBuilder: builder,
+            socketRepository: context.read<SocketRepository>(),
+            httpClientRepository: context.read<HttpClientRepository>(),
+          ),
+          child: const EtiyaChatWidget(),
+        ),
+      );
 }
 
 class EtiyaChatbotBuilder {
+  /// The connection URL for messages to be sent.
+  String serviceUrl;
+
+  /// The connection URL for socket.
+  String socketUrl;
+
   String? userName;
-  String? serviceUrl;
-  String? socketUrl;
   String? authUrl;
   String? messageInputHintText;
   UserAvatar? outgoingAvatar;
   UserAvatar? incomingAvatar;
   ChatTheme chatTheme = const DefaultChatTheme();
 
-  EtiyaChatbotBuilder() {
-    _setDeviceID();
+  EtiyaChatbotBuilder({
+    required this.serviceUrl,
+    required this.socketUrl,
+  }) {
     setLoggingEnabled();
-  }
-
-  Future<void> _setDeviceID() async {
-    const preferenceKey = Constants.deviceIDKey;
-    final sp = await SharedPreferences.getInstance();
-    final deviceID = sp.getString(preferenceKey);
-    if (deviceID == null) {
-      final uuid = const Uuid().v1();
-      sp.setString(preferenceKey, uuid);
-      Log.info("deviceID: $uuid is saved to DB");
-    }
-  }
-
-  Future<String> _getDeviceID() async {
-    await _setDeviceID();
-    final sp = await SharedPreferences.getInstance();
-    return Future(() => sp.getString(Constants.deviceIDKey) ?? 'unset id');
-  }
-
-  Future<String> getUserID() async {
-    final uid = userName ?? 'chatbot_client';
-    final deviceId = await _getDeviceID();
-    Log.info('userId: $uid$deviceId that is used to communicate with socket');
-    return '$uid$deviceId';
   }
 
   /// Behaves like unique id to distinguish chats for backend.
   EtiyaChatbotBuilder setUserName(String name) {
     userName = name;
-    return this;
-  }
-
-  /// The connection URL for messages to be sent.
-  EtiyaChatbotBuilder setServiceUrl(String url) {
-    serviceUrl = url;
-    return this;
-  }
-
-  /// The connection URL for socket.
-  EtiyaChatbotBuilder setSocketUrl(String url) {
-    socketUrl = url;
     return this;
   }
 
