@@ -1,11 +1,15 @@
 import 'package:etiya_chatbot_flutter/src/models/api/etiya_message_response.dart';
 
 abstract class SocketRepository {
-  final String userId;
+  final String userName;
+  final String deviceId;
   final String socketUrl;
 
+  String get visitorId => '${userName}_$deviceId';
+
   SocketRepository({
-    required this.userId,
+    required this.userName,
+    required this.deviceId,
     required this.socketUrl,
   });
 

@@ -17,7 +17,10 @@ class DependencyInjection {
 
     final sharedPreferences = await SharedPreferences.getInstance();
     final socketRepository = SocketRepositoryImpl(
-        userId: deviceId, socketUrl: 'https://chatbotbo-demo8.serdoo.com/nlp');
+      userName: builder.userName,
+      deviceId: deviceId,
+      socketUrl: 'https://chatbotbo-demo8.serdoo.com/nlp',
+    );
 
     final httpClient = HttpClientRepositoryImpl(
       serviceUrl: builder.serviceUrl,

@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:etiya_chatbot_flutter/src/util/logger.dart';
 import 'package:swifty_chat/swifty_chat.dart';
 
 import '../etiya_chatbot.dart';
@@ -8,6 +7,7 @@ import '../models/api/etiya_message_request.dart';
 import '../models/api/etiya_message_response.dart';
 import '../models/etiya_chat_message.dart';
 import '../repositories/socket_repository.dart';
+import '../util/logger.dart';
 
 part 'chatbot_state.dart';
 
@@ -50,7 +50,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
         MessageRequest(
           text: '/user_visit',
           user: MessageUser(
-            senderId: socketRepository.userId,
+            senderId: socketRepository.visitorId,
           ),
         ),
       );
@@ -76,7 +76,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       MessageRequest(
         text: messageText,
         user: MessageUser(
-          senderId: socketRepository.userId,
+          senderId: socketRepository.visitorId,
         ),
       ),
     );
@@ -98,7 +98,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       MessageRequest(
         text: item.payload ?? "payload",
         user: MessageUser(
-          senderId: socketRepository.userId,
+          senderId: socketRepository.visitorId,
         ),
         type: "quick_reply",
         data: QuickReply(
@@ -123,7 +123,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       MessageRequest(
         text: item.payload!,
         user: MessageUser(
-          senderId: socketRepository.userId,
+          senderId: socketRepository.visitorId,
         ),
       ),
     );

@@ -94,9 +94,9 @@ class ToggChatbotTheme extends ChatTheme {
 class MyHomePage extends StatefulWidget {
   final EtiyaChatbot _etiyaChatbot = EtiyaChatbotBuilder(
     serviceUrl: 'https://chatbotbo-demo8.serdoo.com/api/chat',
-    socketUrl: 'https://chatbotbo-demo8.serdoo.com/nlp'
+    socketUrl: 'https://chatbotbo-demo8.serdoo.com/nlp',
+    userName: 'enesKaraosman'
   )
-  .setUserName("enesKaraosman")
   .setLoggingEnabled(true)
   .setIncomingAvatar(
     UserAvatar(
@@ -107,7 +107,7 @@ class MyHomePage extends StatefulWidget {
     ),
   )
   .setChatTheme(ToggChatbotTheme())
-  .setAuthUrl("https://chatbotosb-demo8.serdoo.com/api/auth")
+  .setAuthUrl('https://chatbotosb-demo8.serdoo.com/api/auth')
   .build();
 
   @override

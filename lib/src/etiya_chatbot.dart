@@ -36,7 +36,9 @@ class EtiyaChatbotBuilder {
   /// The connection URL for socket.
   String socketUrl;
 
-  String? userName;
+  /// Behaves like unique id to distinguish chat room for backend.
+  String userName;
+
   String? authUrl;
   String? messageInputHintText;
   UserAvatar? outgoingAvatar;
@@ -46,14 +48,9 @@ class EtiyaChatbotBuilder {
   EtiyaChatbotBuilder({
     required this.serviceUrl,
     required this.socketUrl,
+    required this.userName,
   }) {
     setLoggingEnabled();
-  }
-
-  /// Behaves like unique id to distinguish chats for backend.
-  EtiyaChatbotBuilder setUserName(String name) {
-    userName = name;
-    return this;
   }
 
   /// The connection URL for ldap authorization.

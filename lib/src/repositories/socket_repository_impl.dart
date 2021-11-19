@@ -1,13 +1,18 @@
-import 'package:etiya_chatbot_flutter/src/models/api/etiya_message_response.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import '../models/api/etiya_message_response.dart';
 import 'socket_repository.dart';
 
 class SocketRepositoryImpl extends SocketRepository {
   SocketRepositoryImpl({
-    required String userId,
+    required String userName,
+    required String deviceId,
     required String socketUrl,
-  }) : super(userId: userId, socketUrl: socketUrl);
+  }) : super(
+          userName: userName,
+          deviceId: deviceId,
+          socketUrl: socketUrl,
+        );
 
   @override
   void initializeSocket() {
@@ -15,22 +20,23 @@ class SocketRepositoryImpl extends SocketRepository {
       socketUrl,
       IO.OptionBuilder()
           .enableForceNew()
-          .setQuery({'visitorId': userId})
+          .setQuery({
+            'visitorId': visitorId,
+          })
           .setTransports(['websocket']) // for Flutter or Dart VM
           .setPath('/ws')
           .build(),
-    );
-    (socket as IO.Socket)
-      ..nsp = '/chat'
-      ..on(
-        'newMessage',
-        (json) => onNewMessageReceived?.call(
-          MessageResponse.fromJson(json as Map<String, dynamic>),
-        ),
-      )
-      ..onConnect((data) => onSocketConnected?.call())
-      ..onError((error) => onSocketConnectionFailed?.call(error))
-      ..connect();
+    )
+    ..nsp = '/chat'
+    ..on(
+      'newMessage',
+      (json) => onNewMessageReceived?.call(
+        MessageResponse.fromJson(json as Map<String, dynamic>),
+      ),
+    )
+    ..onConnect((data) => onSocketConnected?.call())
+    ..onError((error) => onSocketConnectionFailed?.call(error))
+    ..connect();
   }
 
   @override
