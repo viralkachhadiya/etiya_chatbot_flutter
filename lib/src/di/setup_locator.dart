@@ -1,3 +1,4 @@
+import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,6 +39,9 @@ class DependencyInjection {
       ),
       RepositoryProvider<HttpClientRepository>(
         create: (_) => httpClient,
+      ),
+      RepositoryProvider<ChatTheme>(
+        create: (_) => builder.chatTheme,
       ),
     ];
   }

@@ -16,8 +16,6 @@ class ChatbotCubit extends Cubit<ChatbotState> {
   final HttpClientRepository httpClientRepository;
   final EtiyaChatbotBuilder chatbotBuilder;
 
-  ChatTheme get chatTheme => chatbotBuilder.chatTheme;
-
   String get messageInputHintText =>
       chatbotBuilder.messageInputHintText ?? "Aa";
 

@@ -36,19 +36,19 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
       },
       builder: (context, state) {
         _chatView = Chat(
-            messages: state.messages,
-            customMessageWidget: (message) => _customWidget(message),
-            theme: context.read<ChatbotCubit>().chatTheme,
-            messageCellSizeConfigurator:
-                MessageCellSizeConfigurator.defaultConfiguration,
-            chatMessageInputField: EtiyaMessageInput(
-              sendButtonTapped: _sendButtonPressedAction,
-              hintText: context.read<ChatbotCubit>().messageInputHintText,
-            ),
-          )
-          .setOnMessagePressed((msg) => _messagePressedAction(msg))
-          .setOnCarouselItemButtonPressed(_carouselPressedAction)
-          .setOnQuickReplyItemPressed(_quickReplyPressedAction);
+          messages: state.messages,
+          customMessageWidget: _customWidget,
+          theme: context.read<ChatTheme>(),
+          messageCellSizeConfigurator:
+              MessageCellSizeConfigurator.defaultConfiguration,
+          chatMessageInputField: EtiyaMessageInput(
+            sendButtonTapped: _sendButtonPressedAction,
+            hintText: context.read<ChatbotCubit>().messageInputHintText,
+          ),
+        )
+            .setOnMessagePressed(_messagePressedAction)
+            .setOnCarouselItemButtonPressed(_carouselPressedAction)
+            .setOnQuickReplyItemPressed(_quickReplyPressedAction);
         return _chatView;
       },
     );
@@ -126,7 +126,10 @@ extension CustomMessageWidget on _EtiyaChatWidgetState {
         final String password = formData["password"] as String;
 
         // if (!mounted) return;
-        context.read<ChatbotCubit>().authenticate(username: email, password: password);
+        context.read<ChatbotCubit>().authenticate(
+              username: email,
+              password: password,
+            );
       },
     );
   }
