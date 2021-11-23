@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:swifty_chat/swifty_chat.dart';
 import 'package:uuid/uuid.dart';
 
@@ -57,7 +58,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
   }
 
   void _insertNewMessages(List<Message> messages) {
-    final updatedMessages = state.messages;
+    final updatedMessages = [...state.messages];
     updatedMessages.insertAll(0, messages);
     emit(
       ChatbotMessages()..messages = updatedMessages,
