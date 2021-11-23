@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:swifty_chat/swifty_chat.dart';
+import 'package:uuid/uuid.dart';
 
 import '../etiya_chatbot.dart';
 import '../models/api/etiya_message_request.dart';
@@ -30,7 +31,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
     required this.chatbotBuilder,
     required this.socketRepository,
     required this.httpClientRepository,
-  }) : super(MessagesUpdated()) {
+  }) : super(ChatbotMessages()) {
     socketRepository.onNewMessageReceived = (messageResponse) {
       Log.info('socketRepository.onNewMessageReceived');
       messageResponse.user?.fullName = chatbotBuilder.userName;
@@ -59,7 +60,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
     final updatedMessages = state.messages;
     updatedMessages.insertAll(0, messages);
     emit(
-      MessagesUpdated()..messages = updatedMessages,
+      ChatbotMessages()..messages = updatedMessages,
     );
   }
 
@@ -77,7 +78,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       [
         EtiyaChatMessage(
           isMe: true,
-          id: DateTime.now().toString(),
+          id: const Uuid().v1(),
           messageKind: MessageKind.text(messageText),
           chatUser: _customerUser,
         ),
@@ -103,7 +104,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
     _insertNewMessages([
       EtiyaChatMessage(
         isMe: true,
-        id: DateTime.now().toString(),
+        id: const Uuid().v1(),
         messageKind: MessageKind.text(item.title),
         chatUser: _customerUser,
       )
@@ -123,7 +124,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
     _insertNewMessages([
       EtiyaChatMessage(
         isMe: true,
-        id: DateTime.now().toString(),
+        id: const Uuid().v1(),
         messageKind: MessageKind.text(item.title),
         chatUser: _customerUser,
       )
@@ -136,19 +137,16 @@ class ChatbotCubit extends Cubit<ChatbotState> {
   }) async {
     final isAuthenticated =
         await httpClientRepository.auth(username: username, password: password);
-    emit(
-      MessagesUpdated()
-        ..messages.insert(
-          0,
-          EtiyaChatMessage(
-            isMe: false,
-            id: DateTime.now().toString(),
-            messageKind: MessageKind.text(
-              isAuthenticated ? "Giriş Başarılı" : "Giriş Başarısız",
-            ),
-            chatUser: _customerUser,
-          ),
+    emit(ChatbotUserAuthenticated(isAuthenticated));
+    _insertNewMessages([
+      EtiyaChatMessage(
+        isMe: false,
+        id: const Uuid().v1(),
+        messageKind: MessageKind.text(
+          isAuthenticated ? "Giriş Başarılı" : "Giriş Başarısız",
         ),
-    );
+        chatUser: _customerUser,
+      )
+    ]);
   }
 }

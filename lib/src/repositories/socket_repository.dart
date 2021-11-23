@@ -27,3 +27,23 @@ abstract class SocketRepository {
 
   void dispose();
 }
+
+class FakeSocketRepository extends SocketRepository {
+  FakeSocketRepository({
+    required String userName,
+    required String deviceId,
+    required String socketUrl,
+  }) : super(
+    userName: userName,
+    deviceId: deviceId,
+    socketUrl: socketUrl,
+  );
+
+  @override
+  void dispose() {}
+
+  @override
+  void initializeSocket() {
+
+  }
+}

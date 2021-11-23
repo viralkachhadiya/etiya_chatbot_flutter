@@ -29,6 +29,24 @@ abstract class HttpClientRepository {
   Future<void> sendMessage(MessageRequest request);
 }
 
+class FakeHttpClientRepository extends HttpClientRepository {
+  FakeHttpClientRepository({
+    required String serviceUrl,
+    required String authUrl,
+    required String userId,
+  }) : super(serviceUrl: serviceUrl, authUrl: authUrl, userId: userId);
+
+  @override
+  Future<bool> auth({required String username, required String password}) {
+    return Future.value(username == 'username' && password == 'password');
+  }
+
+  @override
+  Future<void> sendMessage(MessageRequest request) {
+    return Future.value();
+  }
+}
+
 class HttpClientRepositoryImpl extends HttpClientRepository {
   HttpClientRepositoryImpl({
     required String serviceUrl,

@@ -30,7 +30,7 @@ class _EtiyaChatWidgetState extends State<EtiyaChatWidget> {
   Widget build(BuildContext context) {
     return BlocConsumer<ChatbotCubit, ChatbotState>(
       listener: (context, state) {
-        if (state is MessagesUpdated) {
+        if (state is ChatbotMessages) {
           _chatView.scrollToBottom();
         }
       },
