@@ -1,6 +1,7 @@
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
 import 'package:etiya_chatbot_flutter/src/cubit/chatbot_cubit.dart';
 import 'package:etiya_chatbot_flutter/src/models/api/etiya_message_request.dart';
+import 'package:etiya_chatbot_flutter/src/models/etiya_quick_reply.dart';
 import 'package:etiya_chatbot_flutter/src/repositories/http/http_client_repository.dart';
 import 'package:etiya_chatbot_flutter/src/repositories/socket_repository.dart';
 
@@ -48,10 +49,11 @@ void main() {
     });
 
     tearDown(() {
+      chatbotCubit.dispose();
       chatbotCubit.close();
     });
 
-    test('Should_InitialStateEqual', () {
+    test('initial State Equal empty `ChatbotMessages`', () {
       final _chatbotCubit = ChatbotCubit(
         chatbotBuilder: _etiyaChatbotBuilder,
         socketRepository: _socketRepository,
@@ -62,7 +64,7 @@ void main() {
     });
 
     blocTest<ChatbotCubit, ChatbotState>(
-      'emit ChatbotMessages when user adds message',
+      'emit ChatbotMessages when user adds TEXT message',
       build: () {
         when(
           () => _mockHttpClientRepository.sendMessage(
@@ -76,6 +78,51 @@ void main() {
         ChatbotMessages()
           ..messages = chatbotCubit.state.messages
               .where((element) => element.messageKind.text == 'messageText')
+              .toList(),
+      ],
+    );
+
+    blocTest<ChatbotCubit, ChatbotState>(
+      'emit ChatbotMessages when user adds QUICK_REPLY message',
+      build: () {
+        when(
+          () => _mockHttpClientRepository.sendMessage(
+            any<MessageRequest>(),
+          ),
+        ).thenAnswer((invocation) async {});
+        return chatbotCubit;
+      },
+      act: (bloc) => bloc.userAddedQuickReplyMessage(const EtiyaQuickReplyItem(
+          title: 'quickReplyText', payload: 'quickReplyPayload')),
+      expect: () => [
+        ChatbotMessages()
+          ..messages = chatbotCubit.state.messages
+              .where((element) => element.messageKind.text == 'quickReplyText')
+              .toList(),
+      ],
+    );
+
+    blocTest<ChatbotCubit, ChatbotState>(
+      'emit ChatbotMessages when user adds CAROUSEL message',
+      build: () {
+        when(
+          () => _mockHttpClientRepository.sendMessage(
+            any<MessageRequest>(),
+          ),
+        ).thenAnswer((invocation) async {});
+        return chatbotCubit;
+      },
+      act: (bloc) => bloc.userAddedCarouselMessage(
+        CarouselButtonItem(
+          title: 'carouselButtonTitle',
+          url: 'url',
+          payload: 'carouselButtonPayload',
+        ),
+      ),
+      expect: () => [
+        ChatbotMessages()
+          ..messages = chatbotCubit.state.messages
+              .where((element) => element.messageKind.text == 'carouselButtonTitle')
               .toList(),
       ],
     );
