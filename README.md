@@ -13,6 +13,7 @@
 * iOS
 * Android
 * Web
+* MacOS
 
 ### How to integrate?
 

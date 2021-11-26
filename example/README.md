@@ -7,6 +7,7 @@ An example project to demonstrate how Etiya Chatbot SDK can be implemented.
 * iOS
 * Android
 * Web
+* MacOS
 
 ### How to integrate SDK
 
