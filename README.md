@@ -1,14 +1,19 @@
-# etiya_chatbot_flutter
+# Etiya Chatbot SDK
 
-A new Flutter project.
+### Supported Message Kinds
 
-## Getting Started
+* Text
+* Quick Reply
+* Image
+* Carousel
+* HTML
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+### Supported Platforms
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+* iOS
+* Android
+* Web
+
+### How to integrate?
+
+See [the readme of example project](example/README.md)
