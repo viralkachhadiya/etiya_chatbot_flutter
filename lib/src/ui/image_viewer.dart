@@ -9,7 +9,7 @@ class ImageViewer extends StatelessWidget {
   }) : super(key: key);
 
   final ImageProvider imageProvider;
-  VoidCallback? closeAction;
+  final VoidCallback? closeAction;
 
   @override
   Widget build(BuildContext context) {

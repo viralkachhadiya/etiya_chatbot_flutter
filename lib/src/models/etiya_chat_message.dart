@@ -2,6 +2,7 @@ import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
 import 'package:etiya_chatbot_flutter/src/models/etiya_login_message_kind.dart';
 import 'package:flutter/material.dart';
 import 'package:swifty_chat/swifty_chat.dart';
+import 'package:uuid/uuid.dart';
 
 import '../extensions/string_extensions.dart';
 import '../models/api/etiya_message_response.dart';
@@ -30,7 +31,7 @@ class EtiyaChatMessage extends Message {
 extension MessageMapper on MessageResponse {
   List<EtiyaChatMessage> mapToChatMessage() {
     final List<EtiyaChatMessage> messages = [];
-    final msgId = id ?? DateTime.now().toString();
+    final msgId = id ?? const Uuid().v1();
     final EtiyaChatUser msgUser = user ?? EtiyaChatUser();
     switch (type) {
       case 'login':
@@ -57,9 +58,9 @@ extension MessageMapper on MessageResponse {
               )
               .toList();
           if (text != null) {
-            MessageKind kind = MessageKind.text(text!);
+            MessageKind kind = MessageKind.text(text);
             if (text!.containsHTML) {
-              kind = MessageKind.html(text!);
+              kind = MessageKind.html(text);
             }
             messages.add(
               EtiyaChatMessage(
@@ -80,9 +81,9 @@ extension MessageMapper on MessageResponse {
           );
         } else {
           if (text != null) {
-            MessageKind kind = MessageKind.text(text!);
+            MessageKind kind = MessageKind.text(text);
             if (text!.containsHTML) {
-              kind = MessageKind.html(text!);
+              kind = MessageKind.html(text);
             }
             messages.add(
               EtiyaChatMessage(
@@ -135,7 +136,7 @@ extension MessageMapper on MessageResponse {
 
       case 'file':
         if (hasImage) {
-          String? url = rawMessage?.data?.payload?.url;
+          final String? url = rawMessage?.data?.payload?.url;
           if (url == null) break;
           messages.add(
             EtiyaChatMessage(

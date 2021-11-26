@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 extension EmailValidator on String {
   bool isValidEmail() {
     return RegExp(
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-        .hasMatch(this);
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
+    ).hasMatch(this);
   }
 }
 
@@ -37,7 +37,9 @@ class _LoginSheetState extends State<LoginSheet> {
                 TextFormField(
                   controller: emailFieldController,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (input) => (input?.isValidEmail() ?? false) ? null : "Enter valid email",
+                  validator: (input) => (input?.isValidEmail() ?? false)
+                      ? null
+                      : "Enter valid email",
                   autofocus: true,
                   autocorrect: false,
                   enableSuggestions: false,
@@ -52,7 +54,9 @@ class _LoginSheetState extends State<LoginSheet> {
                 TextFormField(
                   controller: passwordFieldController,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (input) => (input?.isNotEmpty ?? false) ? null : "Enter non-empty password",
+                  validator: (input) => (input?.isNotEmpty ?? false)
+                      ? null
+                      : "Enter non-empty password",
                   obscureText: _isObscure,
                   decoration: InputDecoration(
                     labelText: 'Password',
