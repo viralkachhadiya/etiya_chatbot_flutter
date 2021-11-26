@@ -1,4 +1,4 @@
-package com.etiya.flutter-example
+package com.etiya.example
 
 import io.flutter.embedding.android.FlutterActivity
 

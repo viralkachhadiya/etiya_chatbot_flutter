@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.example">
+    package="com.etiya.flutter-example">
    <application
         android:label="Etiya Chatbot Lab"
         android:icon="@mipmap/ic_launcher">
