@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import '../models/api/etiya_message_response.dart';
 
 abstract class SocketRepository {
@@ -34,16 +37,25 @@ class FakeSocketRepository extends SocketRepository {
     required String deviceId,
     required String socketUrl,
   }) : super(
-    userName: userName,
-    deviceId: deviceId,
-    socketUrl: socketUrl,
-  );
+          userName: userName,
+          deviceId: deviceId,
+          socketUrl: socketUrl,
+        );
 
   @override
   void dispose() {}
 
   @override
-  void initializeSocket() {
+  void initializeSocket() { }
 
+  Future<void> simulateTextMessageReceiveEvent(String text) async {
+    final textMessageResponseJson = File('test/mock/data/text_message_response.json');
+    final MessageResponse messageResponse = MessageResponse.fromJson(
+      jsonDecode(
+        await textMessageResponseJson.readAsString(),
+      ) as Map<String, dynamic>,
+    );
+    messageResponse.text = text;
+    onNewMessageReceived?.call(messageResponse);
   }
 }

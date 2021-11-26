@@ -2,6 +2,7 @@ import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
 import 'package:etiya_chatbot_flutter/src/models/etiya_login_message_kind.dart';
 import 'package:flutter/material.dart';
 import 'package:swifty_chat/swifty_chat.dart';
+import 'package:uuid/uuid.dart';
 
 import '../extensions/string_extensions.dart';
 import '../models/api/etiya_message_response.dart';
@@ -30,7 +31,7 @@ class EtiyaChatMessage extends Message {
 extension MessageMapper on MessageResponse {
   List<EtiyaChatMessage> mapToChatMessage() {
     final List<EtiyaChatMessage> messages = [];
-    final msgId = id ?? DateTime.now().toString();
+    final msgId = id ?? const Uuid().v1();
     final EtiyaChatUser msgUser = user ?? EtiyaChatUser();
     switch (type) {
       case 'login':
