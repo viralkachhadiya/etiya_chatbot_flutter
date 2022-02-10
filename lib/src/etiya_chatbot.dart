@@ -19,7 +19,7 @@ class EtiyaChatbot {
       providers: await DependencyInjection.build(builder),
       child: BlocProvider(
         create: (context) => ChatbotCubit(
-          chatbotBuilder: builder,
+          chatbotBuilder: context.read<EtiyaChatbotBuilder>(),
           socketRepository: context.read<SocketClientRepository>(),
           httpClientRepository: context.read<HttpClientRepository>(),
         ),
@@ -38,6 +38,7 @@ class EtiyaChatbotBuilder {
   /// Behaves like unique id to distinguish chat room for backend.
   String userName;
 
+  String? visitorId;
   String? authUrl;
   String? messageInputHintText;
   UserAvatar? outgoingAvatar;

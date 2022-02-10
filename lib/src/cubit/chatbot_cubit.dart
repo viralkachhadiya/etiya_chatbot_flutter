@@ -18,7 +18,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       chatbotBuilder.messageInputHintText ?? "Aa";
 
   String get visitorId =>
-      socketRepository.query['visitorId'] as String? ?? 'Unknown visitor id';
+      chatbotBuilder.visitorId ?? 'Unknown visitor id';
 
   /// Customer User
   EtiyaChatUser get _customerUser {
