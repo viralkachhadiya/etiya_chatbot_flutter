@@ -10,12 +10,15 @@ import 'package:uuid/uuid.dart';
 part 'chatbot_state.dart';
 
 class ChatbotCubit extends Cubit<ChatbotState> {
-  final SocketRepository socketRepository;
+  final SocketClientRepository socketRepository;
   final HttpClientRepository httpClientRepository;
   final EtiyaChatbotBuilder chatbotBuilder;
 
   String get messageInputHintText =>
       chatbotBuilder.messageInputHintText ?? "Aa";
+
+  String get visitorId =>
+      socketRepository.query['visitorId'] as String? ?? 'Unknown visitor id';
 
   /// Customer User
   EtiyaChatUser get _customerUser {
@@ -29,29 +32,32 @@ class ChatbotCubit extends Cubit<ChatbotState> {
     required this.socketRepository,
     required this.httpClientRepository,
   }) : super(const ChatbotMessages()) {
-    socketRepository.onNewMessageReceived = (messageResponse) {
-      Log.info('socketRepository.onNewMessageReceived');
-      messageResponse.user?.fullName = chatbotBuilder.userName;
-      messageResponse.user?.avatar = chatbotBuilder.incomingAvatar;
-      _insertNewMessages(messageResponse.mapToChatMessage());
-    };
-    socketRepository.onSocketConnected = () async {
-      Log.info('socketRepository.onSocketConnected');
-      await httpClientRepository.sendMessage(
-        MessageRequest(
-          text: '/user_visit',
-          user: MessageUser(
-            senderId: socketRepository.visitorId,
+    socketRepository
+      ..onEvent({
+        'newMessage': (json) {
+          final messageResponse =
+              MessageResponse.fromJson(json as Map<String, dynamic>);
+          Log.info('socketRepository.onNewMessageReceived');
+          messageResponse.user?.fullName = chatbotBuilder.userName;
+          messageResponse.user?.avatar = chatbotBuilder.incomingAvatar;
+          Log.info(messageResponse.toJson().toString());
+          _insertNewMessages(messageResponse.mapToChatMessage());
+        }
+      })
+      ..onError((handler) => Log.error(handler as String? ?? 'Error'))
+      ..onConnect((handler) async {
+        Log.info('socketRepository.onSocketConnected (visitorId=$visitorId)');
+        await httpClientRepository.sendMessage(
+          MessageRequest(
+            text: '/user_visit',
+            user: MessageUser(senderId: visitorId),
           ),
-        ),
-      );
-    };
-    socketRepository.initializeSocket();
+        );
+      })
+      ..connect();
   }
 
-  void dispose() {
-    socketRepository.dispose();
-  }
+  void dispose() => socketRepository.dispose();
 
   void _insertNewMessages(List<Message> messages) {
     final updatedMessages = [...state.messages];
@@ -67,7 +73,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       MessageRequest(
         text: messageText,
         user: MessageUser(
-          senderId: socketRepository.visitorId,
+          senderId: visitorId,
         ),
       ),
     );
@@ -89,7 +95,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       MessageRequest(
         text: item.payload ?? "payload",
         user: MessageUser(
-          senderId: socketRepository.visitorId,
+          senderId: visitorId,
         ),
         type: "quick_reply",
         data: QuickReply(
@@ -114,7 +120,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       MessageRequest(
         text: item.payload!,
         user: MessageUser(
-          senderId: socketRepository.visitorId,
+          senderId: visitorId,
         ),
       ),
     );
