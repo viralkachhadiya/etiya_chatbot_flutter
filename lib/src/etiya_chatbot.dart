@@ -20,7 +20,7 @@ class EtiyaChatbot {
       child: BlocProvider(
         create: (context) => ChatbotCubit(
           chatbotBuilder: builder,
-          socketRepository: context.read<SocketRepository>(),
+          socketRepository: context.read<SocketClientRepository>(),
           httpClientRepository: context.read<HttpClientRepository>(),
         ),
         child: const EtiyaChatWidget(),

@@ -17,10 +17,12 @@ class DependencyInjection {
     final deviceId = await deviceIdRepository.fetchDeviceId();
 
     final sharedPreferences = await SharedPreferences.getInstance();
+
+    final String visitorId = '${builder.userName}_$deviceId';
     final socketRepository = SocketRepositoryImpl(
-      userName: builder.userName,
-      deviceId: deviceId,
-      socketUrl: builder.socketUrl,
+      url: builder.socketUrl,
+      namespace: '/chat',
+      query: { 'visitorId': visitorId },
     );
 
     final httpClient = HttpClientRepositoryImpl(
@@ -30,7 +32,7 @@ class DependencyInjection {
     );
 
     return [
-      RepositoryProvider<SocketRepository>(
+      RepositoryProvider<SocketClientRepository>(
         create: (_) => socketRepository,
       ),
       RepositoryProvider<SharedPreferences>(

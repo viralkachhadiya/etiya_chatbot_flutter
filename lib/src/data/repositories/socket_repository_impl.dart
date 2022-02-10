@@ -1,48 +1,62 @@
-import 'package:etiya_chatbot_flutter/src/data/models/models.dart';
 import 'package:etiya_chatbot_flutter/src/domain/socket_repository.dart';
+
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-class SocketRepositoryImpl extends SocketRepository {
-  SocketRepositoryImpl({
-    required String userName,
-    required String deviceId,
-    required String socketUrl,
-  }) : super(
-          userName: userName,
-          deviceId: deviceId,
-          socketUrl: socketUrl,
-        );
+class SocketRepositoryImpl extends SocketClientRepository {
+  late IO.Socket _socket;
 
-  @override
+  SocketRepositoryImpl({
+    required String url,
+    String namespace = '/',
+    Map query = const {},
+  }) : super(
+          url: url,
+          namespace: namespace,
+          query: query,
+        ) {
+    initializeSocket();
+  }
+
   void initializeSocket() {
-    socket = IO.io(
-      socketUrl,
+    _socket = IO.io(
+      url,
       IO.OptionBuilder()
           .enableForceNew()
-          .setQuery({
-            'visitorId': visitorId,
-          })
+          .setQuery(query)
           .setTransports(['websocket']) // for Flutter or Dart VM
           .setPath('/ws')
           .build(),
-    )
-    ..nsp = '/chat'
-    ..on(
-      'newMessage',
-      (json) => onNewMessageReceived?.call(
-        MessageResponse.fromJson(json as Map<String, dynamic>),
-      ),
-    )
-    ..onConnect((data) => onSocketConnected?.call())
-    ..onError((error) => onSocketConnectionFailed?.call(error))
-    ..connect();
+    )..nsp = namespace;
   }
 
   @override
   void dispose() {
-    (socket as IO.Socket)
+    _socket
       ..close()
       ..clearListeners();
   }
+
+  @override
+  void connect() => _socket.connect();
+
+  @override
+  void onConnect(Handler handler) {
+    _socket.onConnect((data) => handler(data));
+  }
+
+  @override
+  void onEvent(Map<String, Handler> eventHandler) {
+    eventHandler.forEach((key, value) {
+      _socket.on(key, (data) => value(data));
+    });
+  }
+
+  @override
+  void onError(Handler? onError) {
+    _socket.onError((data) => onError?.call(data));
+  }
+
+  @override
+  void emit(String event, [dynamic data]) => _socket.emit(event, data);
 }

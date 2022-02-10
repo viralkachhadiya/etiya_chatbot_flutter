@@ -1,29 +1,25 @@
-import 'package:etiya_chatbot_flutter/src/data/models/models.dart';
+typedef Handler = dynamic Function(dynamic handler);
 
-abstract class SocketRepository {
-  final String userName;
-  final String deviceId;
-  final String socketUrl;
-
-  String get visitorId => '${userName}_$deviceId';
-
-  SocketRepository({
-    required this.userName,
-    required this.deviceId,
-    required this.socketUrl,
+abstract class SocketClientRepository {
+  SocketClientRepository({
+    required this.url,
+    this.namespace = '/',
+    this.query = const {},
   });
 
-  dynamic socket;
+  final String url;
+  final String namespace;
+  final Map query;
 
-  /// Triggered when socket connection establishes
-  Function()? onSocketConnected;
+  void emit(String event, [dynamic data]);
 
-  /// Triggered when socket connection fails
-  Function(dynamic handler)? onSocketConnectionFailed;
+  void onError(Handler? onError);
 
-  Function(MessageResponse messageResponse)? onNewMessageReceived;
+  void onEvent(Map<String, Handler> eventHandler);
 
-  void initializeSocket();
+  void onConnect(Handler handler);
 
   void dispose();
+
+  void connect();
 }
