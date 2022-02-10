@@ -18,11 +18,11 @@ class DependencyInjection {
 
     final sharedPreferences = await SharedPreferences.getInstance();
 
-    final String visitorId = '${builder.userName}_$deviceId';
-    final socketRepository = SocketRepositoryImpl(
+    builder.visitorId = '${builder.userName}_$deviceId';
+    final socketClientRepository = SocketClientRepositoryImpl(
       url: builder.socketUrl,
       namespace: '/chat',
-      query: { 'visitorId': visitorId },
+      query: { 'visitorId': builder.visitorId },
     );
 
     final httpClient = HttpClientRepositoryImpl(
@@ -32,8 +32,11 @@ class DependencyInjection {
     );
 
     return [
+      RepositoryProvider<EtiyaChatbotBuilder>(
+        create: (_) => builder,
+      ),
       RepositoryProvider<SocketClientRepository>(
-        create: (_) => socketRepository,
+        create: (_) => socketClientRepository,
       ),
       RepositoryProvider<SharedPreferences>(
         create: (_) => sharedPreferences,

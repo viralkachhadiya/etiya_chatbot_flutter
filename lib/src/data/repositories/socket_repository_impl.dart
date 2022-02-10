@@ -1,12 +1,10 @@
 import 'package:etiya_chatbot_flutter/src/domain/socket_repository.dart';
+import 'package:togg_mobile_super_app_sdk/togg_mobile_super_app_sdk.dart' hide Handler;
 
-// ignore: library_prefixes
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+class SocketClientRepositoryImpl extends SocketClientRepository {
+  late ITOGGSocketClient _socket;
 
-class SocketRepositoryImpl extends SocketClientRepository {
-  late IO.Socket _socket;
-
-  SocketRepositoryImpl({
+  SocketClientRepositoryImpl({
     required String url,
     String namespace = '/',
     Map query = const {},
@@ -15,47 +13,27 @@ class SocketRepositoryImpl extends SocketClientRepository {
           namespace: namespace,
           query: query,
         ) {
-    initializeSocket();
-  }
-
-  void initializeSocket() {
-    _socket = IO.io(
-      url,
-      IO.OptionBuilder()
-          .enableForceNew()
-          .setQuery(query)
-          .setTransports(['websocket']) // for Flutter or Dart VM
-          .setPath('/ws')
-          .build(),
-    )..nsp = namespace;
+    _socket = TOGGMobileSdk().getTOGGSocketClient(
+      url: url,
+      namespace: namespace,
+      query: query,
+    );
   }
 
   @override
-  void dispose() {
-    _socket
-      ..close()
-      ..clearListeners();
-  }
+  void dispose() => _socket.dispose();
 
   @override
   void connect() => _socket.connect();
 
   @override
-  void onConnect(Handler handler) {
-    _socket.onConnect((data) => handler(data));
-  }
+  void onConnect(Handler handler) => _socket.onConnect(handler);
 
   @override
-  void onEvent(Map<String, Handler> eventHandler) {
-    eventHandler.forEach((key, value) {
-      _socket.on(key, (data) => value(data));
-    });
-  }
+  void onEvent(Map<String, Handler> eventHandler) => _socket.onEvent(eventHandler);
 
   @override
-  void onError(Handler? onError) {
-    _socket.onError((data) => onError?.call(data));
-  }
+  void onError(Handler? onError) => _socket.onError(onError);
 
   @override
   void emit(String event, [dynamic data]) => _socket.emit(event, data);
