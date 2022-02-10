@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ImageViewer extends StatelessWidget {
-  ImageViewer({
+  const ImageViewer({
     Key? key,
     required this.imageProvider,
     this.closeAction,

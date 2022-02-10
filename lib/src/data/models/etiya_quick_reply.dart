@@ -1,14 +1,10 @@
 import 'package:swifty_chat/swifty_chat.dart';
 
 class EtiyaQuickReplyItem extends QuickReplyItem {
-  final String title;
-  final String? payload;
-  final String? url;
-
   const EtiyaQuickReplyItem({
-    required this.title,
-    this.payload,
-    this.url,
+    required String title,
+    String? payload,
+    String? url,
   }) : super(
           title: title,
           payload: payload,

@@ -28,7 +28,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
     required this.chatbotBuilder,
     required this.socketRepository,
     required this.httpClientRepository,
-  }) : super(ChatbotMessages()) {
+  }) : super(const ChatbotMessages()) {
     socketRepository.onNewMessageReceived = (messageResponse) {
       Log.info('socketRepository.onNewMessageReceived');
       messageResponse.user?.fullName = chatbotBuilder.userName;
@@ -57,7 +57,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
     final updatedMessages = [...state.messages];
     updatedMessages.insertAll(0, messages);
     emit(
-      ChatbotMessages()..messages = updatedMessages,
+      ChatbotMessages(messages: updatedMessages),
     );
   }
 

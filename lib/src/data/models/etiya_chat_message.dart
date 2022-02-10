@@ -7,15 +7,12 @@ import 'package:uuid/uuid.dart';
 
 class EtiyaChatMessage extends Message {
   final EtiyaChatUser chatUser;
-  final String id;
-  final bool isMe;
-  final MessageKind messageKind;
 
   const EtiyaChatMessage({
     required this.chatUser,
-    required this.id,
-    required this.isMe,
-    required this.messageKind,
+    required String id,
+    required bool isMe,
+    required MessageKind messageKind,
   }) : super(
           user: chatUser,
           id: id,

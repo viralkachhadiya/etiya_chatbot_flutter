@@ -118,13 +118,13 @@ extension CustomMessageWidget on _EtiyaChatWidgetState {
           builder: (_) => const LoginSheet(),
         );
         debugPrint("FormData $formData");
-        if (formData == null) {
+        if (formData == null || formData is! Map) {
           return;
         }
         final String email = formData["email"] as String;
         final String password = formData["password"] as String;
 
-        // if (!mounted) return;
+        if (!mounted) return;
         context.read<ChatbotCubit>().authenticate(
               username: email,
               password: password,

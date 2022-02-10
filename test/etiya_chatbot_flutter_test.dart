@@ -55,7 +55,7 @@ void main() {
         socketRepository: _socketRepository,
         httpClientRepository: _mockHttpClientRepository,
       );
-      expect(_chatbotCubit.state, ChatbotMessages());
+      expect(_chatbotCubit.state, const ChatbotMessages());
       _chatbotCubit.close();
     });
 
@@ -72,10 +72,11 @@ void main() {
         },
         act: (bloc) => bloc.userAddedMessage('messageText'),
         expect: () => [
-          ChatbotMessages()
-            ..messages = chatbotCubit.state.messages
+          ChatbotMessages(
+            messages: chatbotCubit.state.messages
                 .where((e) => e.messageKind.text == 'messageText')
                 .toList(),
+          ),
         ],
       );
 
@@ -91,13 +92,16 @@ void main() {
         },
         act: (bloc) => bloc.userAddedQuickReplyMessage(
           const EtiyaQuickReplyItem(
-              title: 'quickReplyText', payload: 'quickReplyPayload'),
+            title: 'quickReplyText',
+            payload: 'quickReplyPayload',
+          ),
         ),
         expect: () => [
-          ChatbotMessages()
-            ..messages = chatbotCubit.state.messages
+          ChatbotMessages(
+            messages: chatbotCubit.state.messages
                 .where((e) => e.messageKind.text == 'quickReplyText')
                 .toList(),
+          )
         ],
       );
 
@@ -119,10 +123,11 @@ void main() {
           ),
         ),
         expect: () => [
-          ChatbotMessages()
-            ..messages = chatbotCubit.state.messages
+          ChatbotMessages(
+            messages: chatbotCubit.state.messages
                 .where((e) => e.messageKind.text == 'carouselButtonTitle')
                 .toList(),
+          )
         ],
       );
     });
@@ -143,7 +148,7 @@ void main() {
           username: 'username',
           password: 'correctPassword',
         ),
-        expect: () => contains(ChatbotUserAuthenticated(true)),
+        expect: () => contains(const ChatbotUserAuthenticated(true)),
         verify: (_) {
           verify(
             () => _mockHttpClientRepository.auth(
@@ -169,7 +174,7 @@ void main() {
           username: 'username',
           password: 'wrongPassword',
         ),
-        expect: () => contains(ChatbotUserAuthenticated(false)),
+        expect: () => contains(const ChatbotUserAuthenticated(false)),
         verify: (_) {
           verify(
             () => _mockHttpClientRepository.auth(
@@ -202,11 +207,14 @@ void main() {
         act: (_) => _socketRepository
             .simulateTextMessageReceiveEvent("textMessageReceived"),
         expect: () => [
-          ChatbotMessages()
-            ..messages = chatbotCubit.state.messages
-                .where((element) =>
-                    element.messageKind.text == 'textMessageReceived')
+          ChatbotMessages(
+            messages: chatbotCubit.state.messages
+                .where(
+                  (element) =>
+                      element.messageKind.text == 'textMessageReceived',
+                )
                 .toList(),
+          )
         ],
       );
     });

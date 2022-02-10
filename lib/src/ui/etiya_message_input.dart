@@ -1,7 +1,6 @@
+import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:styled_widget/styled_widget.dart';
-
-import '../../etiya_chatbot_flutter.dart';
 
 class EtiyaMessageInput extends StatelessWidget {
   EtiyaMessageInput({

@@ -1,9 +1,13 @@
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({
+    Key? key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,10 +19,10 @@ class MyApp extends StatelessWidget {
 }
 
 class ToggChatbotTheme extends ChatTheme {
-  ToggChatbotTheme() : super();
+  const ToggChatbotTheme() : super();
 
-  Color toggPrimary = const Color(0xFF00C2E7);
-  Color toggSecondary = const Color(0xFFFF8933);
+  final Color toggPrimary = const Color(0xFF00C2E7);
+  final Color toggSecondary = const Color(0xFFFF8933);
 
   @override
   Color get backgroundColor => neutral7;
@@ -92,23 +96,25 @@ class ToggChatbotTheme extends ChatTheme {
 }
 
 class MyHomePage extends StatefulWidget {
+  MyHomePage({Key? key}) : super(key: key);
+
   final EtiyaChatbot _etiyaChatbot = EtiyaChatbotBuilder(
     serviceUrl: 'https://chatbotbo-demo8.serdoo.com/api/chat',
     socketUrl: 'https://chatbotbo-demo8.serdoo.com/nlp',
-    userName: 'enesKaraosman'
+    userName: 'enesKaraosman',
   )
-  .setLoggingEnabled(true)
-  .setIncomingAvatar(
-    UserAvatar(
-      size: 36,
-      imageProvider: const NetworkImage(
-        'https://www.softronic.se/wp-content/uploads/2020/03/avatar_chatbot.png',
-      ),
-    ),
-  )
-  .setChatTheme(ToggChatbotTheme())
-  .setAuthUrl('https://chatbotosb-demo8.serdoo.com/api/auth')
-  .build();
+      .setLoggingEnabled(true)
+      .setIncomingAvatar(
+        UserAvatar(
+          size: 36,
+          imageProvider: const NetworkImage(
+            'https://www.softronic.se/wp-content/uploads/2020/03/avatar_chatbot.png',
+          ),
+        ),
+      )
+      .setChatTheme(const ToggChatbotTheme())
+      .setAuthUrl('https://chatbotosb-demo8.serdoo.com/api/auth')
+      .build();
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
