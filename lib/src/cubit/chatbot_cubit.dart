@@ -1,15 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:swifty_chat/swifty_chat.dart';
+import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
+import 'package:etiya_chatbot_flutter/src/data/models/models.dart';
+import 'package:etiya_chatbot_flutter/src/domain/http_client_repository.dart';
+import 'package:etiya_chatbot_flutter/src/domain/socket_repository.dart';
+import 'package:etiya_chatbot_flutter/src/util/logger.dart';
 import 'package:uuid/uuid.dart';
-
-import '../etiya_chatbot.dart';
-import '../models/api/etiya_message_request.dart';
-import '../models/api/etiya_message_response.dart';
-import '../models/etiya_chat_message.dart';
-import '../repositories/http/http_client_repository.dart';
-import '../repositories/socket_repository.dart';
-import '../util/logger.dart';
 
 part 'chatbot_state.dart';
 

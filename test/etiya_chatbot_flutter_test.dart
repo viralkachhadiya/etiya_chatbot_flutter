@@ -1,11 +1,9 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
 import 'package:etiya_chatbot_flutter/src/cubit/chatbot_cubit.dart';
-import 'package:etiya_chatbot_flutter/src/models/api/etiya_message_request.dart';
-import 'package:etiya_chatbot_flutter/src/models/etiya_quick_reply.dart';
-import 'package:etiya_chatbot_flutter/src/repositories/http/http_client_repository.dart';
-import 'package:etiya_chatbot_flutter/src/repositories/socket_repository.dart';
-
-import 'package:bloc_test/bloc_test.dart';
+import 'package:etiya_chatbot_flutter/src/data/models/models.dart';
+import 'package:etiya_chatbot_flutter/src/data/repositories/socket_repository_fake_impl.dart';
+import 'package:etiya_chatbot_flutter/src/domain/http_client_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

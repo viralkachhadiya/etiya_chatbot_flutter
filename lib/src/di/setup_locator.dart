@@ -1,12 +1,11 @@
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
+import 'package:etiya_chatbot_flutter/src/data/repositories/device_id_repository_impl.dart';
+import 'package:etiya_chatbot_flutter/src/data/repositories/http_client_repository_impl.dart';
+import 'package:etiya_chatbot_flutter/src/data/repositories/socket_repository_impl.dart';
+import 'package:etiya_chatbot_flutter/src/domain/http_client_repository.dart';
+import 'package:etiya_chatbot_flutter/src/domain/socket_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../etiya_chatbot.dart';
-import '../repositories/device_id_repository.dart';
-import '../repositories/http/http_client_repository.dart';
-import '../repositories/socket_repository.dart';
-import '../repositories/socket_repository_impl.dart';
 
 class DependencyInjection {
   const DependencyInjection._();

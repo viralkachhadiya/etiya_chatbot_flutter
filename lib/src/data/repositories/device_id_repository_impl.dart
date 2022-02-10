@@ -1,10 +1,7 @@
+import 'package:etiya_chatbot_flutter/src/domain/device_id_repository.dart';
 import 'package:etiya_chatbot_flutter/src/util/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
-
-abstract class DeviceIdRepository {
-  Future<String> fetchDeviceId();
-}
 
 class DeviceIdRepositoryImpl extends DeviceIdRepository {
   String _generateDeviceId() {

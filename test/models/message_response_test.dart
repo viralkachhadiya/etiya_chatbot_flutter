@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:etiya_chatbot_flutter/src/data/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import '../../lib/src/models/api/etiya_message_response.dart';
 
 void main() {
   group('Message Kinds', () {

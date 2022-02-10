@@ -1,51 +1,9 @@
 import 'dart:convert';
 
-import 'package:etiya_chatbot_flutter/src/models/api/etiya_message_request.dart';
+import 'package:etiya_chatbot_flutter/src/data/models/models.dart';
+import 'package:etiya_chatbot_flutter/src/domain/http_client_repository.dart';
 import 'package:etiya_chatbot_flutter/src/util/logger.dart';
 import 'package:http/http.dart' as http;
-
-abstract class HttpClientRepository {
-  final String serviceUrl;
-  final String authUrl;
-  final String userId;
-
-  HttpClientRepository({
-    required this.serviceUrl,
-    required this.authUrl,
-    required this.userId,
-  });
-
-  /// LDAP Auth
-  /// - Parameter username: User Name
-  /// - Parameter password: User Password
-  /// Returns authentication status.
-  Future<bool> auth({
-    required String username,
-    required String password,
-  });
-
-  /// Send Message to Server
-  /// - Parameter message: `MessageRequest` wraps the actual message (text or data)
-  Future<void> sendMessage(MessageRequest request);
-}
-
-class FakeHttpClientRepository extends HttpClientRepository {
-  FakeHttpClientRepository({
-    required String serviceUrl,
-    required String authUrl,
-    required String userId,
-  }) : super(serviceUrl: serviceUrl, authUrl: authUrl, userId: userId);
-
-  @override
-  Future<bool> auth({required String username, required String password}) {
-    return Future.value(username == 'username' && password == 'password');
-  }
-
-  @override
-  Future<void> sendMessage(MessageRequest request) {
-    return Future.value();
-  }
-}
 
 class HttpClientRepositoryImpl extends HttpClientRepository {
   HttpClientRepositoryImpl({

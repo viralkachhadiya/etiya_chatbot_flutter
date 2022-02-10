@@ -1,13 +1,9 @@
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
-import 'package:etiya_chatbot_flutter/src/models/etiya_login_message_kind.dart';
+import 'package:etiya_chatbot_flutter/src/data/models/models.dart';
+import 'package:etiya_chatbot_flutter/src/extensions/string_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:swifty_chat/swifty_chat.dart';
 import 'package:uuid/uuid.dart';
-
-import '../extensions/string_extensions.dart';
-import '../models/api/etiya_message_response.dart';
-import '../models/etiya_carousel_item.dart';
-import '../models/etiya_quick_reply.dart';
 
 class EtiyaChatMessage extends Message {
   final EtiyaChatUser chatUser;

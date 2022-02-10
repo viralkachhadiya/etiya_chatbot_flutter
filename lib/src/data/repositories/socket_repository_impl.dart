@@ -1,8 +1,7 @@
+import 'package:etiya_chatbot_flutter/src/data/models/models.dart';
+import 'package:etiya_chatbot_flutter/src/domain/socket_repository.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-
-import '../models/api/etiya_message_response.dart';
-import 'socket_repository.dart';
 
 class SocketRepositoryImpl extends SocketRepository {
   SocketRepositoryImpl({

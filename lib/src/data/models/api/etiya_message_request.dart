@@ -1,4 +1,4 @@
-import '../api/etiya_message_response.dart';
+import 'package:etiya_chatbot_flutter/src/data/models/models.dart';
 
 class MessageUser {
   MessageUser({required this.senderId});
