@@ -14,6 +14,7 @@
 * Android
 * Web
 * MacOS
+* Windows
 
 ### How to integrate?
 
