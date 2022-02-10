@@ -35,6 +35,12 @@ dependencies:
   # https://pub.dev/packages/swifty_chat
   swifty_chat: ^1.2.0
 
+  togg_mobile_super_app_sdk:
+    git:
+      url: https://gitlab.togg.com.tr/digitalplatform/togg-mobile/mobile-super-app/togg_mobile_superapp_sdk
+      ref: socket-client-proxy
+#      ref: main
+
   # https://pub.dev/packages/url_launcher
   url_launcher: ^6.0.20
 
