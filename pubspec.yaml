@@ -12,25 +12,25 @@ dependencies:
 
   equatable: ^2.0.3
 
+  etiya_chatbot_data:
+    path: packages/etiya_chatbot_core/etiya_chatbot_data
+
+  etiya_chatbot_domain:
+    path: packages/etiya_chatbot_core/etiya_chatbot_domain
+
+  etiya_chatbot_mocked_data:
+    path: packages/etiya_chatbot_core/etiya_chatbot_mocked_data
+
   flutter:
     sdk: flutter
 
   flutter_bloc: ^8.0.1
-
-  # https://pub.dev/packages/http
-  http: ^0.13.4
 
   # https://pub.dev/packages/logger
   logger: ^1.1.0
 
   # https://pub.dev/packages/photo_view
   photo_view: ^0.13.0
-
-  # https://pub.dev/packages/shared_preferences
-  shared_preferences: ^2.0.13
-
-  # https://pub.dev/packages/socket_io_client
-  socket_io_client: ^2.0.0-beta.4-nullsafety.0
 
   # https://pub.dev/packages/swifty_chat
   swifty_chat: ^1.2.0

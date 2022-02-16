@@ -1,5 +1,5 @@
+import 'package:etiya_chatbot_data/etiya_chatbot_data.dart';
 import 'package:etiya_chatbot_flutter/src/cubit/chatbot_cubit.dart';
-import 'package:etiya_chatbot_flutter/src/data/models/models.dart';
 import 'package:etiya_chatbot_flutter/src/ui/etiya_message_input.dart';
 import 'package:etiya_chatbot_flutter/src/ui/image_viewer.dart';
 import 'package:etiya_chatbot_flutter/src/ui/login_sheet.dart';
@@ -78,7 +78,7 @@ extension ChatInteractions on _EtiyaChatWidgetState {
   Future<void> _carouselPressedAction(CarouselButtonItem item) async {
     Log.info(item.toString());
     if (item.url != null) {
-      if (await canLaunch("")) {
+      if (await canLaunch(item.url!)) {
         // TODO: Check if this works for VPN things
         // You may need to make sure device's browser is opened.
         await launch(item.url!);

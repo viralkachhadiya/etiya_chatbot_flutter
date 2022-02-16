@@ -1,10 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:etiya_chatbot_data/etiya_chatbot_data.dart';
+import 'package:etiya_chatbot_domain/etiya_chatbot_domain.dart';
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
 import 'package:etiya_chatbot_flutter/src/cubit/chatbot_cubit.dart';
-import 'package:etiya_chatbot_flutter/src/data/models/models.dart';
-import 'package:etiya_chatbot_flutter/src/data/repositories/socket_repository_fake_impl.dart';
-import 'package:etiya_chatbot_flutter/src/domain/http_client_repository.dart';
-import 'package:etiya_chatbot_flutter/src/domain/socket_repository.dart';
+import 'package:etiya_chatbot_mocked_data/etiya_chatbot_mocked_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -63,7 +62,11 @@ void main() {
         build: () {
           when(
             () => _mockHttpClientRepository.sendMessage(
-              any<MessageRequest>(),
+              text: any<String>(),
+              senderId: any<String>(),
+              quickReplyTitle: any<String>(),
+              quickReplyPayload: any<String>(),
+              type: any<String>(),
             ),
           ).thenAnswer((_) async {});
           return chatbotCubit;
@@ -83,7 +86,11 @@ void main() {
         build: () {
           when(
             () => _mockHttpClientRepository.sendMessage(
-              any<MessageRequest>(),
+              text: any<String>(),
+              senderId: any<String>(),
+              quickReplyTitle: any<String>(),
+              quickReplyPayload: any<String>(),
+              type: any<String>(),
             ),
           ).thenAnswer((_) async {});
           return chatbotCubit;
@@ -108,7 +115,11 @@ void main() {
         build: () {
           when(
             () => _mockHttpClientRepository.sendMessage(
-              any<MessageRequest>(),
+              text: any<String>(),
+              senderId: any<String>(),
+              quickReplyTitle: any<String>(),
+              quickReplyPayload: any<String>(),
+              type: any<String>(),
             ),
           ).thenAnswer((_) async {});
           return chatbotCubit;
