@@ -1,7 +1,6 @@
+import 'package:etiya_chatbot_domain/etiya_chatbot_domain.dart';
 import 'package:etiya_chatbot_flutter/src/cubit/chatbot_cubit.dart';
 import 'package:etiya_chatbot_flutter/src/di/setup_locator.dart';
-import 'package:etiya_chatbot_flutter/src/domain/http_client_repository.dart';
-import 'package:etiya_chatbot_flutter/src/domain/socket_repository.dart';
 import 'package:etiya_chatbot_flutter/src/ui/etiya_chat_widget.dart';
 import 'package:etiya_chatbot_flutter/src/util/logger.dart';
 import 'package:flutter/material.dart';

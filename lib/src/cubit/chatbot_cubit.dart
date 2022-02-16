@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:etiya_chatbot_data/etiya_chatbot_data.dart';
+import 'package:etiya_chatbot_domain/etiya_chatbot_domain.dart';
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
-import 'package:etiya_chatbot_flutter/src/data/models/models.dart';
-import 'package:etiya_chatbot_flutter/src/domain/http_client_repository.dart';
-import 'package:etiya_chatbot_flutter/src/domain/socket_repository.dart';
 import 'package:etiya_chatbot_flutter/src/util/logger.dart';
 import 'package:uuid/uuid.dart';
 
@@ -48,10 +47,8 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       ..onConnect((handler) async {
         Log.info('socketRepository.onSocketConnected (visitorId=$visitorId)');
         await httpClientRepository.sendMessage(
-          MessageRequest(
-            text: '/user_visit',
-            user: MessageUser(senderId: visitorId),
-          ),
+          text: '/user_visit',
+          senderId: visitorId,
         );
       })
       ..connect();
@@ -70,12 +67,8 @@ class ChatbotCubit extends Cubit<ChatbotState> {
   /// Triggered when user fills message input field.
   Future<void> userAddedMessage(String messageText) async {
     await httpClientRepository.sendMessage(
-      MessageRequest(
-        text: messageText,
-        user: MessageUser(
-          senderId: visitorId,
-        ),
-      ),
+      text: messageText,
+      senderId: visitorId,
     );
     _insertNewMessages(
       [
@@ -92,17 +85,11 @@ class ChatbotCubit extends Cubit<ChatbotState> {
   /// Triggered when user taps quick reply button
   void userAddedQuickReplyMessage(QuickReplyItem item) {
     httpClientRepository.sendMessage(
-      MessageRequest(
-        text: item.payload ?? "payload",
-        user: MessageUser(
-          senderId: visitorId,
-        ),
-        type: "quick_reply",
-        data: QuickReply(
-          title: item.title,
-          payload: item.payload ?? "payload",
-        ),
-      ),
+      text: item.payload ?? "payload",
+      senderId: visitorId,
+      type: 'quick_reply',
+      quickReplyTitle: item.title,
+      quickReplyPayload: item.payload,
     );
     _insertNewMessages([
       EtiyaChatMessage(
@@ -117,12 +104,8 @@ class ChatbotCubit extends Cubit<ChatbotState> {
   /// Triggered when user taps carousel button
   void userAddedCarouselMessage(CarouselButtonItem item) {
     httpClientRepository.sendMessage(
-      MessageRequest(
-        text: item.payload!,
-        user: MessageUser(
-          senderId: visitorId,
-        ),
-      ),
+      text: item.payload!,
+      senderId: visitorId,
     );
     _insertNewMessages([
       EtiyaChatMessage(

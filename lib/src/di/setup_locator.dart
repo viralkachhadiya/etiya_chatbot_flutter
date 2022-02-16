@@ -1,11 +1,7 @@
+import 'package:etiya_chatbot_data/etiya_chatbot_data.dart';
+import 'package:etiya_chatbot_domain/etiya_chatbot_domain.dart';
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
-import 'package:etiya_chatbot_flutter/src/data/repositories/device_id_repository_impl.dart';
-import 'package:etiya_chatbot_flutter/src/data/repositories/http_client_repository_impl.dart';
-import 'package:etiya_chatbot_flutter/src/data/repositories/socket_repository_impl.dart';
-import 'package:etiya_chatbot_flutter/src/domain/http_client_repository.dart';
-import 'package:etiya_chatbot_flutter/src/domain/socket_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DependencyInjection {
   const DependencyInjection._();
@@ -15,8 +11,6 @@ class DependencyInjection {
   ) async {
     final deviceIdRepository = DeviceIdRepositoryImpl();
     final deviceId = await deviceIdRepository.fetchDeviceId();
-
-    final sharedPreferences = await SharedPreferences.getInstance();
 
     builder.visitorId = '${builder.userName}_$deviceId';
     final socketClientRepository = SocketClientRepositoryImpl(
@@ -37,9 +31,6 @@ class DependencyInjection {
       ),
       RepositoryProvider<SocketClientRepository>(
         create: (_) => socketClientRepository,
-      ),
-      RepositoryProvider<SharedPreferences>(
-        create: (_) => sharedPreferences,
       ),
       RepositoryProvider<HttpClientRepository>(
         create: (_) => httpClient,
