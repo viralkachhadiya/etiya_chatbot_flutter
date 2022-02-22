@@ -13,13 +13,13 @@ dependencies:
   equatable: ^2.0.3
 
   etiya_chatbot_data:
-    path: packages/etiya_chatbot_core/etiya_chatbot_data
+    path: ./packages/etiya_chatbot_core/etiya_chatbot_data
 
   etiya_chatbot_domain:
-    path: packages/etiya_chatbot_core/etiya_chatbot_domain
+    path: ./packages/etiya_chatbot_core/etiya_chatbot_domain
 
   etiya_chatbot_mocked_data:
-    path: packages/etiya_chatbot_core/etiya_chatbot_mocked_data
+    path: ./packages/etiya_chatbot_core/etiya_chatbot_mocked_data
 
   flutter:
     sdk: flutter
