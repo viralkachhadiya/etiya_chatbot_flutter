@@ -16,13 +16,14 @@ class DependencyInjection {
     final socketClientRepository = SocketClientRepositoryImpl(
       url: builder.socketUrl,
       namespace: '/chat',
-      query: { 'visitorId': builder.visitorId },
+      query: {'visitorId': builder.visitorId},
     );
 
     final httpClient = HttpClientRepositoryImpl(
       serviceUrl: builder.serviceUrl,
       authUrl: builder.authUrl!,
       userId: deviceId,
+      accessToken: builder.accessToken,
     );
 
     return [

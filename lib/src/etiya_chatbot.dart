@@ -15,16 +15,16 @@ class EtiyaChatbot {
   });
 
   Future<Widget> getChatWidget() async => MultiRepositoryProvider(
-      providers: await DependencyInjection.build(builder),
-      child: BlocProvider(
-        create: (context) => ChatbotCubit(
-          chatbotBuilder: context.read<EtiyaChatbotBuilder>(),
-          socketRepository: context.read<SocketClientRepository>(),
-          httpClientRepository: context.read<HttpClientRepository>(),
+        providers: await DependencyInjection.build(builder),
+        child: BlocProvider(
+          create: (context) => ChatbotCubit(
+            chatbotBuilder: context.read<EtiyaChatbotBuilder>(),
+            socketRepository: context.read<SocketClientRepository>(),
+            httpClientRepository: context.read<HttpClientRepository>(),
+          ),
+          child: const EtiyaChatWidget(),
         ),
-        child: const EtiyaChatWidget(),
-      ),
-  );
+      );
 }
 
 class EtiyaChatbotBuilder {
@@ -37,6 +37,7 @@ class EtiyaChatbotBuilder {
   /// Behaves like unique id to distinguish chat room for backend.
   String userName;
 
+  String? accessToken;
   String? visitorId;
   String? authUrl;
   String? messageInputHintText;
@@ -50,6 +51,12 @@ class EtiyaChatbotBuilder {
     required this.userName,
   }) {
     setLoggingEnabled();
+  }
+
+  /// The connection URL for ldap authorization.
+  EtiyaChatbotBuilder setAccessToken(String token) {
+    accessToken = token;
+    return this;
   }
 
   /// The connection URL for ldap authorization.

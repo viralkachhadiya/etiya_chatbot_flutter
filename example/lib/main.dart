@@ -99,10 +99,12 @@ class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
 
   final EtiyaChatbot _etiyaChatbot = EtiyaChatbotBuilder(
-    serviceUrl: 'https://chatbotbo-demo8.serdoo.com/api/chat',
-    socketUrl: 'https://chatbotbo-demo8.serdoo.com/nlp',
+    serviceUrl: 'https://chatbotbo-test.togg.com.tr/api/chat',
+    socketUrl: 'https://chatbotbo-test.togg.com.tr/nlp',
     userName: 'enesKaraosman',
   )
+      .setAccessToken(
+          'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJuQ2dERW8wNjhtTHJPZDZzeUttYThPaEgtTmtwUXZsNGs5UTlrX0JHbHlRIn0.eyJleHAiOjE2NDYyMDU4MDYsImlhdCI6MTY0NjIwNDAwNiwiYXV0aF90aW1lIjoxNjQ2MjA0MDA2LCJqdGkiOiJhZmFkYzRlZS1mNjMxLTQwMmMtOWFkZS1iMDg3MTM2Nzc5OWYiLCJpc3MiOiJodHRwczovL3RvZ2dpZC5kZXZlbG9wbWVudC50b2dnLmNsb3VkL2F1dGgvcmVhbG1zL3RvZ2dpZCIsInN1YiI6IjYyNmIyYTRlLTNlMzItNDIzNC1iYjdjLWIwMTQ1NGQzZjk4OSIsInR5cCI6IkJlYXJlciIsImF6cCI6InN1cGVyLWFwcCIsIm5vbmNlIjoiclJrLWNQMWNwSmlIVXJUQjc3YTZRQ2JHRHF5LVNfOURzOXNzNWxrelJsQSIsInNlc3Npb25fc3RhdGUiOiJkZDYxOTNjZi1jZWI1LTRjM2YtYTQ5MC03Yzk3NDFhYzVlNDgiLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm1vYmlsZS1hcHAtdXNlciJdfSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJFbmVzIEthcmFvc21hbiIsInByZWZlcnJlZF91c2VybmFtZSI6ImVuZXMua2FyYW9zbWFuQGV0aXlhLmNvbSIsImdpdmVuX25hbWUiOiJFbmVzIiwiZmFtaWx5X25hbWUiOiJLYXJhb3NtYW4iLCJlbWFpbCI6ImVuZXMua2FyYW9zbWFuQGV0aXlhLmNvbSJ9.FrW3mf-5e_-EcFaStdXa_vhM5tgiuwAZncDOTsyhEGDHpamZvuV85-bE0Hqa2R9uGnO6wZjJXrkc7H2joMH3CJMJ770uwZNIJz4b807rEnW3A8Qjru424MZ2HxGD7lFW6DaS5ygWIPhBspfTcjqAzUkaFWEhXKTrEKqteI-kEqYuA0omLnb6ycUn_GfO2hJWhbvVsqE4Aq1fQO5wEIV_1Y9RSsZ_mNowHuBT5f_7GikUCMlAQt6i8sEHBMEkNOne8Wdz_pcnZJtme1VgD2UsAF7e3uL6h2bu2irmlCmyxymiZMqTbcl_01AFCA_yGvQfObccVoJGpo7JmEzK2tgceQ')
       .setLoggingEnabled(true)
       .setIncomingAvatar(
         UserAvatar(
