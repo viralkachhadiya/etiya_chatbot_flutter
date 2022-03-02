@@ -645,7 +645,7 @@ packages:
       name: share_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.4"
+    version: "3.1.0"
   share_plus_linux:
     dependency: transitive
     description:
@@ -851,11 +851,11 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: socket-client-proxy
-      resolved-ref: "62f34e2ff933303e874eccb739f5df322411df10"
+      ref: main
+      resolved-ref: "86158581cdf1ee89dea4e882395b3a9a0df57a62"
       url: "https://gitlab.togg.com.tr/digitalplatform/togg-mobile/mobile-super-app/togg_mobile_superapp_sdk"
     source: git
-    version: "0.0.3"
+    version: "0.0.5"
   tuple:
     dependency: transitive
     description:
