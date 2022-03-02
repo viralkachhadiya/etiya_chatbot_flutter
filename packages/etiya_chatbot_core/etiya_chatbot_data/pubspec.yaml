@@ -1,5 +1,5 @@
 name: etiya_chatbot_data
-description: Includes data models & domain repository implementations
+description: Includes data models and domain repository implementations
 version: 1.0.0
 publish_to: none
 
@@ -24,7 +24,7 @@ dependencies:
       url: https://gitlab.togg.com.tr/digitalplatform/togg-mobile/mobile-super-app/togg_mobile_superapp_sdk
       ref: main
 
-  uuid: ^3.0.5
+  uuid: ^3.0.6
 
 dev_dependencies:
   flutter_test:
