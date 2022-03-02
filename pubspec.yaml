@@ -1,6 +1,6 @@
 name: etiya_chatbot_flutter
 description: A new Flutter project.
-version: 0.0.3
+version: 0.0.4
 repository: https://github.com/Etiya/etiya_chatbot_flutter.git
 
 environment:
@@ -8,7 +8,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  bloc: ^8.0.2
+  bloc: ^8.0.3
 
   equatable: ^2.0.3
 
@@ -39,17 +39,17 @@ dependencies:
   url_launcher: ^6.0.20
 
   # https://pub.dev/packages/uuid
-  uuid: ^3.0.5
+  uuid: ^3.0.6
 
 dev_dependencies:
-  bloc_test: ^9.0.2
+  bloc_test: ^9.0.3
   build_runner: ^2.1.7
   flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
 
   mockito: ^5.1.0
-  mocktail: ^0.2.0
+  mocktail: ^0.3.0
 
   styled_widget: ^0.4.0+3
 
