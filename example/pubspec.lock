@@ -245,7 +245,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.2"
+    version: "0.0.3"
   etiya_chatbot_mocked_data:
     dependency: transitive
     description:

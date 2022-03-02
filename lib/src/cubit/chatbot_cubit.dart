@@ -4,6 +4,7 @@ import 'package:etiya_chatbot_data/etiya_chatbot_data.dart';
 import 'package:etiya_chatbot_domain/etiya_chatbot_domain.dart';
 import 'package:etiya_chatbot_flutter/etiya_chatbot_flutter.dart';
 import 'package:etiya_chatbot_flutter/src/util/logger.dart';
+import 'package:togg_mobile_super_app_sdk/togg_mobile_super_app_sdk.dart';
 import 'package:uuid/uuid.dart';
 
 part 'chatbot_state.dart';
@@ -16,14 +17,27 @@ class ChatbotCubit extends Cubit<ChatbotState> {
   String get messageInputHintText =>
       chatbotBuilder.messageInputHintText ?? "Aa";
 
-  String get visitorId =>
-      chatbotBuilder.visitorId ?? 'Unknown visitor id';
+  String get visitorId => chatbotBuilder.visitorId ?? 'Unknown visitor id';
 
   /// Customer User
   EtiyaChatUser get _customerUser {
-    final user = EtiyaChatUser(fullName: chatbotBuilder.userName);
-    user.avatar = chatbotBuilder.outgoingAvatar;
-    return user;
+    try {
+      final toggUser = TOGGMobileSdk().getTOGGUser();
+      final user = EtiyaChatUser(
+        fullName: chatbotBuilder.userName,
+        userId: toggUser.userId,
+        firstName: toggUser.firstName,
+        lastName: toggUser.lastName,
+      );
+      user.avatar = chatbotBuilder.outgoingAvatar;
+      return user;
+    } catch (error) {
+      final user = EtiyaChatUser(
+        fullName: chatbotBuilder.userName,
+      );
+      user.avatar = chatbotBuilder.outgoingAvatar;
+      return user;
+    }
   }
 
   ChatbotCubit({
