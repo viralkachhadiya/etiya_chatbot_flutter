@@ -18,6 +18,7 @@ class SocketClientRepositoryImpl extends SocketClientRepository {
       url: url,
       namespace: namespace,
       query: query,
+      enableLogs: true,
     );
   }
 

@@ -21,9 +21,8 @@ class DependencyInjection {
 
     final httpClient = HttpClientRepositoryImpl(
       serviceUrl: builder.serviceUrl,
-      authUrl: builder.authUrl!,
+      authUrl: builder.authUrl,
       userId: deviceId,
-      accessToken: builder.accessToken,
     );
 
     return [

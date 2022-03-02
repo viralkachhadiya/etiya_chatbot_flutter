@@ -3,7 +3,7 @@ import 'package:etiya_chatbot_domain/etiya_chatbot_domain.dart';
 class FakeHttpClientRepository extends HttpClientRepository {
   FakeHttpClientRepository({
     required String serviceUrl,
-    required String authUrl,
+    required String? authUrl,
     required String userId,
   }) : super(serviceUrl: serviceUrl, authUrl: authUrl, userId: userId);
 

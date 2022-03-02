@@ -37,7 +37,6 @@ class EtiyaChatbotBuilder {
   /// Behaves like unique id to distinguish chat room for backend.
   String userName;
 
-  String? accessToken;
   String? visitorId;
   String? authUrl;
   String? messageInputHintText;
@@ -51,12 +50,6 @@ class EtiyaChatbotBuilder {
     required this.userName,
   }) {
     setLoggingEnabled();
-  }
-
-  /// The connection URL for ldap authorization.
-  EtiyaChatbotBuilder setAccessToken(String token) {
-    accessToken = token;
-    return this;
   }
 
   /// The connection URL for ldap authorization.

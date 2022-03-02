@@ -9,16 +9,14 @@ import 'package:togg_mobile_super_app_sdk/togg_mobile_super_app_sdk.dart';
 class HttpClientRepositoryImpl extends HttpClientRepository {
   HttpClientRepositoryImpl({
     required String serviceUrl,
-    required String authUrl,
+    required String? authUrl,
     required String userId,
-    required String? accessToken,
   }) : super(
           serviceUrl: serviceUrl,
           authUrl: authUrl,
           userId: userId,
-          accessToken: accessToken,
         ) {
-    _httpClient = TOGGMobileSdk().getTOGGHttpClient();
+    _httpClient = TOGGMobileSdk().getTOGGHttpClient(null, true);
   }
 
   late final ITOGGHttpClient _httpClient;
@@ -29,8 +27,9 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
     required String password,
   }) async {
     try {
+      if (authUrl == null) return false;
       final _response = await _httpClient.post(
-        endpoint: authUrl,
+        endpoint: authUrl!,
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -77,7 +76,6 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
         endpoint: '$serviceUrl/mobile',
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'accessToken': accessToken ?? 'no_access_token'
         },
         params: MessageRequest(
           text: text,
