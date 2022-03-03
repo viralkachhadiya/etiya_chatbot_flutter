@@ -5,17 +5,20 @@ class MessageUser {
     required this.senderId,
     this.firstName,
     this.lastName,
+    this.language,
   });
 
   /// Togg Id
   final String senderId;
   final String? firstName;
   final String? lastName;
+  final String? language;
 
   Map<String, dynamic> toJson() => {
         "userId": senderId,
         "first_name": firstName,
         "last_name": lastName,
+        "language": language,
       };
 }
 

@@ -87,6 +87,7 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
             senderId: senderId,
             firstName: toggUser.firstName,
             lastName: toggUser.lastName,
+            language: toggUser.language,
           ),
           type: type,
           data: QuickReply(title: quickReplyTitle, payload: quickReplyPayload),
