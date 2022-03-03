@@ -72,6 +72,7 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
     String? quickReplyPayload,
   }) async {
     try {
+      final toggUser = TOGGMobileSdk().getTOGGUser();
       final _response = await _httpClient.post(
         endpoint: '$serviceUrl/mobile',
         headers: <String, String>{
@@ -79,7 +80,11 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
         },
         params: MessageRequest(
           text: text,
-          user: MessageUser(senderId: senderId),
+          user: MessageUser(
+            senderId: senderId,
+            firstName: toggUser.firstName,
+            lastName: toggUser.lastName,
+          ),
           type: type,
           data: QuickReply(title: quickReplyTitle, payload: quickReplyPayload),
         ).toJson(),
