@@ -34,7 +34,6 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
         endpoint: authUrl!,
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken',
         },
         params: {
           "username": username,
@@ -80,6 +79,7 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
         endpoint: '$serviceUrl/mobile',
         headers: <String, String>{
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
         },
         params: MessageRequest(
           text: text,
