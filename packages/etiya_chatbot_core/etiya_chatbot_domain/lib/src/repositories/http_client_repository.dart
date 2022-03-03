@@ -2,11 +2,13 @@ abstract class HttpClientRepository {
   final String serviceUrl;
   final String? authUrl;
   final String userId;
+  final String accessToken;
 
   HttpClientRepository({
     required this.serviceUrl,
     required this.authUrl,
     required this.userId,
+    required this.accessToken,
   });
 
   /// LDAP Auth

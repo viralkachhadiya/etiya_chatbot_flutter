@@ -37,6 +37,9 @@ class EtiyaChatbotBuilder {
   /// Behaves like unique id to distinguish chat room for backend.
   String userName;
 
+  /// Jwt token
+  String accessToken;
+
   String? visitorId;
   String? authUrl;
   String? messageInputHintText;
@@ -48,6 +51,7 @@ class EtiyaChatbotBuilder {
     required this.serviceUrl,
     required this.socketUrl,
     required this.userName,
+    required this.accessToken,
   }) {
     setLoggingEnabled();
   }

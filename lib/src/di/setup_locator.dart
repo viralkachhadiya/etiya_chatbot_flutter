@@ -28,6 +28,7 @@ class DependencyInjection {
       serviceUrl: builder.serviceUrl,
       authUrl: builder.authUrl,
       userId: deviceId,
+      accessToken: builder.accessToken,
     );
 
     return [

@@ -11,10 +11,12 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
     required String serviceUrl,
     required String? authUrl,
     required String userId,
+    required String accessToken,
   }) : super(
           serviceUrl: serviceUrl,
           authUrl: authUrl,
           userId: userId,
+          accessToken: accessToken,
         ) {
     _httpClient = TOGGMobileSdk().getTOGGHttpClient(null, true);
   }
@@ -32,6 +34,7 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
         endpoint: authUrl!,
         headers: <String, String>{
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
         },
         params: {
           "username": username,

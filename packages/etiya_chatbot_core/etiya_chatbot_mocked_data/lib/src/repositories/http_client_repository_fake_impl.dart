@@ -5,7 +5,13 @@ class FakeHttpClientRepository extends HttpClientRepository {
     required String serviceUrl,
     required String? authUrl,
     required String userId,
-  }) : super(serviceUrl: serviceUrl, authUrl: authUrl, userId: userId);
+    required String accessToken,
+  }) : super(
+          serviceUrl: serviceUrl,
+          authUrl: authUrl,
+          userId: userId,
+          accessToken: accessToken,
+        );
 
   @override
   Future<bool> auth({
