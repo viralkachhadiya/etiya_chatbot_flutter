@@ -44,23 +44,13 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
       final response = _response as http.Response?;
       if (response == null) return false;
       if (response.statusCode >= 200 && response.statusCode <= 300) {
-        print(response.body);
-        // Log.info(response.body);
         final json = jsonDecode(response.body) as Map<String, dynamic>;
         final isAuth = json["isAuth"] as bool? ?? false;
-        print("isAuthenticated: $isAuth");
-        // Log.info("isAuthenticated: $isAuth");
         return isAuth;
       } else {
-        // Log.error(
-        print(
-          "User's message could not sent, statusCode: ${response.statusCode}",
-        );
         return false;
       }
     } catch (error) {
-      print(error.toString());
-      // Log.error(error.toString());
       return false;
     }
   }
@@ -75,7 +65,7 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
   }) async {
     try {
       final toggUser = TOGGMobileSdk().getTOGGUser();
-      final _response = await _httpClient.post(
+      return await _httpClient.post(
         endpoint: '$serviceUrl/mobile',
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -90,22 +80,14 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
             language: toggUser.language,
           ),
           type: type,
-          data: QuickReply(title: quickReplyTitle, payload: quickReplyPayload),
+          data: QuickReply(
+            title: quickReplyTitle,
+            payload: quickReplyPayload,
+          ),
+          accessToken: accessToken,
         ).toJson(),
       );
-      final response = _response as http.Response?;
-      if (response == null) return;
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
-        // Log.info("User's message sent successfully");
-        print("User's message sent successfully");
-      } else {
-        print(
-          // Log.error(
-          "User's message could not sent, statusCode: ${response.statusCode}",
-        );
-      }
     } catch (error) {
-      // Log.error(error.toString());
       print(error.toString());
     }
   }

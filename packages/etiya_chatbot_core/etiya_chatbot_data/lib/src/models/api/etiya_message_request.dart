@@ -28,17 +28,22 @@ class MessageRequest {
     required this.text,
     required this.user,
     this.data,
+    this.accessToken,
   });
 
   final String type;
   final String text;
   final MessageUser user;
   final QuickReply? data;
+  final String? accessToken;
 
   Map<String, dynamic> toJson() => {
         "type": type,
         "text": text,
         "user": user.toJson(),
         "data": data?.toJson(),
+        "extras": {
+          "access_token": accessToken
+        },
       };
 }
