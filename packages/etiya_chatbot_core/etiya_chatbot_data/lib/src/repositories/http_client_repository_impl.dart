@@ -65,11 +65,9 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
   }) async {
     try {
       final toggUser = TOGGMobileSdk().getTOGGUser();
-      var headers = <String, String>{
-        'Content-Type': 'application/json'
-      };
+      var headers = <String, String>{'Content-Type': 'application/json'};
       if (accessToken != null) {
-        headers.putIfAbsent('Authorization', accessToken);
+        headers.addAll({'Authorization': accessToken!});
       }
       return await _httpClient.post(
         endpoint: '$serviceUrl/mobile',
