@@ -103,8 +103,8 @@ class MyHomePage extends StatefulWidget {
     serviceUrl: 'https://chatbotbo-test.togg.com.tr/api/chat',
     socketUrl: 'https://chatbotbo-test.togg.com.tr/nlp',
     userName: 'johnDoe',
-    accessToken: 'Bearer *jwt*',
   )
+      .setAccessToken('Bearer *jwt*')
       .setLoggingEnabled(true)
       .setIncomingAvatar(
         UserAvatar(
