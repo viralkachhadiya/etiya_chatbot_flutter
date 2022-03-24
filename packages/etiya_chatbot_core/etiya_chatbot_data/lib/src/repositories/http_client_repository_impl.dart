@@ -11,7 +11,7 @@ class HttpClientRepositoryImpl extends HttpClientRepository {
     required String serviceUrl,
     required String? authUrl,
     required String userId,
-    required String accessToken,
+    String? accessToken,
   }) : super(
           serviceUrl: serviceUrl,
           authUrl: authUrl,
