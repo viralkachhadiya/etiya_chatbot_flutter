@@ -14,8 +14,8 @@ class EtiyaChatbot {
     required this.builder,
   });
 
-  Future<Widget> getChatWidget() async => MultiRepositoryProvider(
-        providers: await DependencyInjection.build(builder),
+  Widget getChatWidget() => MultiRepositoryProvider(
+        providers: DependencyInjection.build(builder),
         child: BlocProvider(
           create: (context) => ChatbotCubit(
             chatbotBuilder: context.read<EtiyaChatbotBuilder>(),
@@ -38,7 +38,7 @@ class EtiyaChatbotBuilder {
   String userName;
 
   /// Jwt token
-  String accessToken;
+  String? accessToken;
 
   String? visitorId;
   String? authUrl;
@@ -51,9 +51,14 @@ class EtiyaChatbotBuilder {
     required this.serviceUrl,
     required this.socketUrl,
     required this.userName,
-    required this.accessToken,
   }) {
     setLoggingEnabled();
+  }
+
+  /// The jwt access token.
+  EtiyaChatbotBuilder setAccessToken(String jwt) {
+    accessToken = jwt;
+    return this;
   }
 
   /// The connection URL for ldap authorization.

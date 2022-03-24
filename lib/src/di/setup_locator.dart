@@ -7,15 +7,10 @@ import 'package:togg_mobile_super_app_sdk/togg_mobile_super_app_sdk.dart';
 class DependencyInjection {
   const DependencyInjection._();
 
-  static Future<List<RepositoryProvider>> build(
+  static List<RepositoryProvider> build(
     EtiyaChatbotBuilder builder,
-  ) async {
-    // final deviceIdRepository = DeviceIdRepositoryImpl();
+  ) {
 
-    final deviceId = TOGGMobileSdk().getTOGGUser().userId;
-      // await deviceIdRepository.fetchDeviceId();
-
-    // builder.visitorId = '${builder.userName}_$deviceId';
     builder.visitorId = TOGGMobileSdk().getTOGGUser().userId;
 
     final socketClientRepository = SocketClientRepositoryImpl(
@@ -24,6 +19,7 @@ class DependencyInjection {
       query: {'visitorId': builder.visitorId},
     );
 
+    final deviceId = TOGGMobileSdk().getTOGGUser().userId;
     final httpClient = HttpClientRepositoryImpl(
       serviceUrl: builder.serviceUrl,
       authUrl: builder.authUrl,
